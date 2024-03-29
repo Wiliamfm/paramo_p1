@@ -32,6 +32,7 @@ export const RouterHead = component$(() => {
       {head.scripts.map((s) => (
         <script key={s.key} {...s.props} dangerouslySetInnerHTML={s.script} />
       ))}
+      <script src="https://kit.fontawesome.com/1b88a9f2ca.js" crossOrigin="anonymous"></script>
     </>
   );
 });
