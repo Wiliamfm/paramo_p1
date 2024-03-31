@@ -1,4 +1,5 @@
 import { $, component$, QRL } from '@builder.io/qwik';
+import { DocumentHead } from '@builder.io/qwik-city';
 import { useForm, SubmitHandler } from '@modular-forms/qwik';
 import {
   email,
@@ -94,3 +95,7 @@ export default component$(() => {
     </Form>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Qwik Todo List",
+};
