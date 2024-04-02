@@ -16,6 +16,12 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
   });
 };
 
+export const onRequestLogin: RequestHandler = async ({next, url}) => {
+  console.log('Before request hayout', url);
+  await next();
+  console.log('After request hayout', url);
+};
+
 export const useServerTimeLoader = routeLoader$(() => {
   return {
     date: new Date().toISOString(),
@@ -24,12 +30,14 @@ export const useServerTimeLoader = routeLoader$(() => {
 
 export default component$(() => {
   return (
-    <>
+    <div class="dark:bg-black h-screen flex flex-col">
       <Header />
       <main>
-        <Slot />
+        <div class="mt-4 p-4">
+          <Slot />
+        </div>
       </main>
-      <Footer />
-    </>
+      <Footer class="mt-auto"/>
+    </div>
   );
 });

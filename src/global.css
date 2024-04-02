@@ -26,8 +26,8 @@
 
 @layer components {
 
-  .btn-dark {
-    background: var(--qwik-dirty-black);
+  .icon-dark {
+    color: white;
   }
 
 }
