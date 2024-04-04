@@ -3,6 +3,8 @@
 /lib
 /lib-types
 /server
+bun.lockb
+package-lock.json
 
 # Development
 node_modules
