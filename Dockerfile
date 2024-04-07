@@ -35,7 +35,7 @@ FROM base as final
  
 # Use production node environment by default.
 ENV NODE_ENV production
-ENV ORIGIN https://example.com
+#ENV ORIGIN https://example.com
  
 # Run the application as a non-root user.
 USER node
@@ -53,4 +53,4 @@ COPY --from=build /usr/src/app/server ./server
 EXPOSE 3000
  
 # Run the application.
-CMD npm serve
+CMD npm run serve
