@@ -1,10 +1,9 @@
-import { $, component$, Slot, useSignal } from "@builder.io/qwik";
+import { component$, Slot } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 
 import Header from "../components/common/header/header";
 import Footer from "../components/common/footer/footer";
-import { SideBarMenu } from "~/components/common/sideBarMenu/sideBarMenu";
 
 export const head: DocumentHead = {
   title: "Paramo Presenta",
@@ -28,24 +27,16 @@ export const useServerTimeLoader = routeLoader$(() => {
 });
 
 export default component$(() => {
-  const showSideBarMenu = useSignal(false);
-
-  const toggleSideBarMenu = $(() => {
-    showSideBarMenu.value = !showSideBarMenu.value;
-  });
 
   return (
-    <div class="flex">
-      {showSideBarMenu.value && <SideBarMenu />}
-      <div class="dark:bg-black h-screen flex flex-col">
-        <Header toggleSideBarMenu$={toggleSideBarMenu} />
-        <main>
-          <div class="mt-4 p-4">
-            <Slot />
-          </div>
-        </main>
-        <Footer class="mt-auto"/>
-      </div>
+    <div class="flex flex-col dark:bg-black h-screen w-screen">
+      <Header />
+      <main>
+        <div class="mt-4 p-4">
+          <Slot />
+        </div>
+      </main>
+      <Footer class="mt-auto"/>
     </div>
   );
 });
