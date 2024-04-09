@@ -9,6 +9,7 @@ package-lock.json
 # Development
 node_modules
 *.local
+/environmets
 
 # Cache
 .cache
