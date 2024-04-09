@@ -4,7 +4,7 @@ import Card from '~/components/common/card/card';
 export default component$(() => {
   return (
     <div>
-    <Card ImgUrl='' title='William te amo' description='te amo mucho no dejes a la nenuka pricioso'/>
-    <Card ImgUrl='' title='Te amo tanto' description='algun dia seras mi esposo'/> </div> 
+      <Card ImgUrl='' title="test" description="This is a test"/>
+    </div> 
   );
 });
