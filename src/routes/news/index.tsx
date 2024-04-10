@@ -6,7 +6,7 @@ export default component$(() => {
   return (
     <div class="w-full py-10">
       {NEWS.map(newItem=>(
-          <CardNew  key={newItem.id} title={newItem.name} description={newItem.description}/>
+          <CardNew  key={newItem.id} title={newItem.name} description={newItem.description} id={newItem.id} date={newItem.date}/>
       ))}
     </div>
   );
