@@ -66,9 +66,10 @@ export default component$<HeaderProps>(() => {
             </div>
           </div>
         </nav>
-        <ImgParamoLogo class="w-1/3 mx-auto" alt="Paramo Logo"/>
-        <div class=" font-bold flex justify-evenly text-center text-black-500 dark:text-gray-400 p-4 w-5/6 mx-auto border-y-2 border-y-black dark:border-y-white">
-          <NavLink href="/news" activeClass="text-black-600 bg-white-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-red-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">NOTICIAS</NavLink>
+        <ImgParamoLogo class="w-1/3 mx-auto" alt="Paramo Logo" />
+        {/* menu navigato */}
+        <div class="flex justify-evenly text-center text-gray-500 sm:overflow-x-scroll dark:text-gray-400 p-4 w-5/6 mx-auto border-y-2 border-y-black dark:border-y-white">
+          <NavLink href="/news" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Noticias</NavLink>
           <span class="border-x border-x-black dark:border-x-white"/>
           <NavLink href="/ideas" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-red-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">IDEAS</NavLink>
           <span class="border-x border-x-black dark:border-x-white"/>

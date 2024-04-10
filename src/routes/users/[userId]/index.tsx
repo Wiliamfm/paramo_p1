@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 export const useGetUser = routeLoader$(async ({ params, status }) => {
   const userId = parseInt(params["userId"], 10);
   const prisma = new PrismaClient();
-  const user = await prisma.users.findUnique({ where: { id: String(userId) } });
+  const user = await prisma.users.findUnique({ where: { id: (userId) } });
   if (!user) {
     // Set the status to 404 if the user is not found
     status(404);
