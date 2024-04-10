@@ -29,14 +29,14 @@ export const useServerTimeLoader = routeLoader$(() => {
 export default component$(() => {
 
   return (
-    <div class="flex flex-col dark:bg-black h-screen w-screen">
+    <div class="flex flex-col dark:bg-black h-screen w-screen overflow-y-scroll">
       <Header />
       <main>
-        <div class="mt-4 p-4">
+        <div class="">
           <Slot />
         </div>
       </main>
-      <Footer class="mt-auto"/>
+      <Footer class=""/>
     </div>
   );
 });

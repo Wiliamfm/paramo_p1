@@ -12,7 +12,7 @@ export default component$<FooterProps>((props) => {
   return (
     <footer class={props.class}>
       <div class="flex items-center	 pt-4 mx-auto text-center w-4/5 dark:text-white border-t-2 border-t-black dark:border-t-white">
-        <ImgParamoLogo class="mr-4" style={{ width: '200px'}} alt="Paramo Logo" />
+        <ImgParamoLogo class="" style={{ width: '200px'}} alt="Paramo Logo" />
         <span class="">{serverTime.value.date}</span>
       </div>
     </footer>

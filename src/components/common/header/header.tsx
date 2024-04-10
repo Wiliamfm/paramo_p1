@@ -13,17 +13,17 @@ export default component$<HeaderProps>(() => {
   const sideBarMenuRef = useSignal<Element>();
 
   return (
-    <>
+    <div class="w-full h-full">
       <div ref={sideBarMenuRef} >
         <SideBarMenu id="drawer-navigation" />
       </div>
-      <div onFocusIn$={() => {
+      <div class="w-full h-full"  onFocusIn$={() => {
           const closeButton= sideBarMenuRef.value?.getElementsByTagName("button")[0];
           if(closeButton) {
             closeButton.click();
           }
       }} tabIndex={0} >
-        <nav class="w-screen mx-auto border-b-2 p-4 border-b-black dark:border-b-white dark:text-white">
+        <nav class="w-full border-b-2 p-4 border-b-black dark:border-b-white dark:text-white">
           <div class="flex flex-wrap items-stretch justify-stretch">
             <div class="p-2 border-r-2 border-r-black dark:border-r-white">
               <button type="button" class="flex items-center" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
@@ -66,7 +66,7 @@ export default component$<HeaderProps>(() => {
           </div>
         </nav>
         <ImgParamoLogo class="w-1/3 mx-auto" alt="Paramo Logo" />
-        <div class="flex justify-evenly text-center text-gray-500 dark:text-gray-400 p-4 w-5/6 mx-auto border-y-2 border-y-black dark:border-y-white">
+        <div class="flex justify-evenly text-center text-gray-500 overflow-x-scroll dark:text-gray-400 p-4 w-5/6 mx-auto border-y-2 border-y-black dark:border-y-white">
           <NavLink href="/news" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Noticias</NavLink>
           <span class="border-x border-x-black dark:border-x-white"/>
           <NavLink href="/ideas" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Ideas</NavLink>
@@ -78,6 +78,6 @@ export default component$<HeaderProps>(() => {
           <NavLink href="/" activeClass="" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Buscar</NavLink>
         </div>
       </div>
-    </>
+    </div>
   );
 });
