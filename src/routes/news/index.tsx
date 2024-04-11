@@ -1,6 +1,5 @@
 import { component$ } from '@builder.io/qwik';
-import { CardNew } from '~/components/common/cardNew/cardNew';
-import { NEWS } from '~/utils/newsArray';
+import Card from '~/components/common/card/card';
 
 export default component$(() => {
   return (

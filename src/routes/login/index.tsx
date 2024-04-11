@@ -2,7 +2,6 @@ import { component$ } from '@builder.io/qwik';
 import { useForm, formAction$, valiForm$, required, minLength, email } from '@modular-forms/qwik';
 import { TextInput } from '~/components/form/TextInput/text-input';
 import * as v from 'valibot';
-import { PrismaClient } from '@prisma/client'
 
 const LoginSchema = v.object({
     email: v.string([
@@ -22,9 +21,6 @@ export default component$(() => {
 
   const useFormAction = formAction$<LoginForm>(async (values) => {
     console.log(values)
-    const prisma = new PrismaClient();
-    const users = await prisma.users.findMany();
-    console.log(users);
   }, valiForm$(LoginSchema));
 
   const [, { Form, Field }] = useForm<LoginForm>({
