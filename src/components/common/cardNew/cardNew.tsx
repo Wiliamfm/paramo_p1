@@ -2,7 +2,7 @@ import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
 
-export const CardNew = component$(({ title, description, id, date }: {id:string, title: string, description: string, date:string }) => {
+export const CardNew = component$(({ title, id }: {id:string, title: string, description: string, date:string }) => {
     return (
         <Link href={`/news/${id}`} class="w-full h-[230px] flex justify-center items-center transition-all ease-in-out duration-[0.5s] hover:bg-black hover:text-white md:h-[260px] ">
             <div class="w-[85%] h-full flex justify-center items-center sm:flex-row-reverse ">
