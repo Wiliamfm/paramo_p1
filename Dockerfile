@@ -15,8 +15,13 @@ FROM base as deps
 # Leverage a cache mount to /root/.yarn to speed up subsequent builds.
 # Leverage bind mounts to package.json and yarn.lock to avoid having to copy them
 # into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-   npm install --frozen-lockfile
+COPY package.json /usr/src/app
+#This give permissions issues to package.json
+#RUN --mount=type=bind,source=package.json,target=package.json \
+   #--mount=type=bind,source=yarn.lock,target=yarn.lock \
+   #--mount=type=cache,target=/root/.yarn \
+   #yarn install --frozen-lockfile
+RUN yarn install --frozen-lockfile
  
 ################################################################################
 # Create a stage for building the application.
@@ -26,7 +31,7 @@ FROM deps as build
 COPY . .
  
 # Run the build script.
-RUN npm run build
+RUN yarn run build
  
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
@@ -35,7 +40,7 @@ FROM base as final
  
 # Use production node environment by default.
 ENV NODE_ENV production
-#ENV ORIGIN https://example.com
+ENV ORIGIN https://example.com
  
 # Run the application as a non-root user.
 USER node
@@ -53,4 +58,4 @@ COPY --from=build /usr/src/app/server ./server
 EXPOSE 3000
  
 # Run the application.
-CMD npm run serve
+CMD yarn serve
