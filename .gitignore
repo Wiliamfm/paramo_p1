@@ -10,6 +10,7 @@ package-lock.json
 node_modules
 *.local
 /environmets
+.env
 
 # Cache
 .cache
