@@ -60,7 +60,10 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^2.4.3",
     "flowbite": "^2.3.0",
+    "jose": "^5.2.4",
     "valibot": "^0.30.0"
   }
 }
