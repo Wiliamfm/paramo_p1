@@ -1,37 +1,37 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is for dev purposes (Mongo is not configured)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("MONGO_DATABASE_URL")
-}
-
-model Roles {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String @unique
-  description String?
-  UsersRoles UsersRoles[]
-  created_at  DateTime @default(now())
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Users {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  email   String   @unique
+  id    Int     @id @default(autoincrement())
+  email String  @unique
   password String
-  name    String?
+  name  String?
   UsersRoles UsersRoles[]
   created_at DateTime @default(now())
 }
 
+model Roles {
+  id    Int     @id @default(autoincrement())
+  name String @unique
+  description String?
+  UsersRoles UsersRoles[]
+  created_at  DateTime @default(now())
+  authorId  Int?
+}
+
 model UsersRoles {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
-  user_id    String
+  id    Int     @id @default(autoincrement())
+  user_id    Int
   users Users @relation(fields: [user_id], references: [id])
-  role_id    String
+  role_id    Int
   roles Roles @relation(fields: [role_id], references: [id])
   created_at DateTime @default(now())
 }
