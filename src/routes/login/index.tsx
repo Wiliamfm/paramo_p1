@@ -1,29 +1,35 @@
 import { component$ } from '@builder.io/qwik';
-import { Form, routeAction$, validator$, zod$ } from '@builder.io/qwik-city';
+import { Form, RequestHandler, routeAction$, zod$ } from '@builder.io/qwik-city';
 import { loginRequestSchema } from '~/schemas/login.schema';
-import { LoginValidator } from '~/validators/login.validator';
 import { TextInput } from '~/components/form/TextInput/text-input';
 import { createJWT } from '~/utils/helpers';
+import { login } from '~/services/AuthAppService';
+import { UserResponse } from '~/models/Response/login.model';
+import { log } from '~/services/LoginService';
 
-export const useLogin = routeAction$(async (_, requestEvent) => {
-  console.log(requestEvent.parseBody());
-//    const jwt = await createJWT(body);
-//    return {
-//      success: true,
-//      data: jwt
-//    }
-//  }
-  //const jwt = await createJWT();
-
-  //console.log(jwt)
-  return {
-    success: true,
-    //data: jwt
+export const useLogin = routeAction$(async (data, requestEvent) => {
+  const response = await login(data);
+  if(!response.success){
+    return requestEvent.fail(response.status, response.error);
   }
-  //requestEvent.headers.set('Authorization', `Bearer ${token}`);
+
+  const user : UserResponse = {
+    id: response.data.id,
+    email: response.data.email,
+    name: response.data.name,
+    created_at: response.data.created_at
+  }
+  const jwt = await createJWT(user);
+
+  log(`User ${user.email} logged in: ${jwt}`);
+  //requestEvent.json(200, {
+  return { success: true,
+    access_token: jwt,
+    token_type: 'bearer',
+  };
+  //});
 },
-  zod$(loginRequestSchema),
-  validator$(LoginValidator)
+  zod$(loginRequestSchema)
 );
 
 export default component$(() => {
@@ -32,9 +38,6 @@ export default component$(() => {
   const labelErrorClass = labelClass + " text-red-700 dark:text-red-500";
   const inputClass = "text-sm rounded-lg block w-full p-2.5 border border-gray-400 dark:bg-gray-700 dark:text-white dark:placeholder-white";
   const inputErrorClass = inputClass + " bg-red-50 border border-red-500 text-red-900 placeholder-red-700 focus:border-red-500 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500";
-  console.log(loginAction);
-  console.log(loginAction?.value);
-  console.log(loginAction?.value?.fieldErrors);
 
   return (
     <div>

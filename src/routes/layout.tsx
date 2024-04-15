@@ -9,7 +9,7 @@ export const head: DocumentHead = {
   title: "Paramo Presenta",
 };
 
-export const onGet: RequestHandler = async ({ cacheControl }) => {
+export const onGet: RequestHandler = async ({ cacheControl, ...requestEvent }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
   // https://qwik.builder.io/docs/caching/
   cacheControl({
@@ -18,6 +18,12 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
     // Max once every 5 seconds, revalidate on the server to get a fresh version of this page
     maxAge: 5,
   });
+  console.log(requestEvent.request);
+  const token = getTokenFromHeader(requestEvent.request.headers.get('Authorization') || '');
+  if(token){
+    console.log(`Token: ${token}`);
+    requestEvent.headers.set('Authorization', `Bearer ${token}`);
+  }
 };
 
 export const useServerTimeLoader = routeLoader$(() => {
@@ -40,3 +46,11 @@ export default component$(() => {
     </div>
   );
 });
+
+const getTokenFromHeader = (authHeader: string): string | null => {
+  const parts = authHeader.split(" ");
+  if(parts.length === 2 && parts[0] === 'Bearer') {
+    return parts[1];
+  }
+  return null;
+}

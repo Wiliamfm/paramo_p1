@@ -1,4 +1,4 @@
-export interface Success {
+export interface Success<T> {
   success: true;
-  data?: any;
+  data: T;
 }
