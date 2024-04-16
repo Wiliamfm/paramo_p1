@@ -1,21 +1,65 @@
-import { component$ } from "@builder.io/qwik"
+import { component$, useSignal, $ } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
+import Ima from "../../../../public/images/prueba1.jpg";
 
-interface CardProps {
-    ImgUrl: string;
+export const Card = component$(
+  ({
+    title,
+    id,
+  }: {
+    id: string;
     title: string;
-    description?: string;
-    url?: string;
-  }
+    description: string;
+    date: string;
+  }) => {
+    const isOn = useSignal(false);
 
-export default component$<CardProps>((props) => {
-    return (        
-        <a href="#" class="flex flex-col items-center bg-white  rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100  dark:bg-gray-800 dark:hover:bg-gray-700">
-           <div>
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{props.title}</h5>
-            <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{props.description}</p>
-           </div>
-            <img src={props.ImgUrl} class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" alt="" width="200" height="200"/>
-        </a>
+    const handleHover = $((hovered: boolean) => {
+      isOn.value = hovered;
+    });
+
+    return (
+      <Link
+        href={`/news/${id}`}
+        class="flex h-[230px] w-full items-center justify-center transition-all duration-[0.5s] ease-in-out hover:bg-black hover:text-white md:h-[260px] "
+        onMouseEnter$={async () => {
+          await handleHover(true);
+        }}
+        onMouseLeave$={async () => {
+          await handleHover(false);
+        }}
+      >
+        <div class="flex h-full w-[85%] items-center justify-center sm:flex-row-reverse ">
+          <div class="flex h-[120px] w-[60%] pl-3 sm:flex-col md:h-[160px] md:w-[65%]">
+            <div class="md:w-[15%]">
+              <span class="text-gray-500">02.03.24</span>
+            </div>
+
+            <div class="w-[85%] pl-3 sm:pl-0 ">
+              <h2 class="text font-bold">{title}</h2>
+              <button class="h-7 w-7 rounded-md bg-red-500 text-white">
+                ir
+              </button>
+              
+            </div>
+          </div>
+          <div class="newContainer flex h-full w-[40%] items-center justify-center overflow-hidden md:w-[35%]">
+            <div
+              class={`prueba newContainerImage h-[120px] w-[140px] overflow-hidden     md:h-[160px] md:w-[230px] `}
+            >
+              <img
+                src={Ima}
+                width="120"
+                height="140"
+                style={{
+                  transform: isOn.value ? "scale(1.25)" : "scale(1)",
+                  transition: "transform 0.5s ease-in-out",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </Link>
     );
-
-});
+  },
+);
