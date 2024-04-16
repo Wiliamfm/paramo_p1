@@ -5,19 +5,14 @@ import { PrismaClient } from "@prisma/client";
 export const useCreateUser = routeAction$(
   async (data) => {
     const prisma = new PrismaClient();
-    const user = await prisma.users.create({
-      data: {
-        name: data.name,
-        email: data.email,
-        password: data.password
-      },
+    const user = await prisma.user.create({
+      data,
     });
     return user;
   },
   zod$({
     name: z.string(),
     email: z.string().email(),
-    password: z.string(),
   }),
 );
 
