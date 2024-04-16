@@ -22,6 +22,8 @@ COPY package.json /usr/src/app
    #--mount=type=bind,source=yarn.lock,target=yarn.lock \
    #--mount=type=cache,target=/root/.yarn \
    #yarn install --frozen-lockfile
+
+RUN yarn add sharp --ignore-engines
 RUN yarn install --frozen-lockfile
  
 ################################################################################
