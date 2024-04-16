@@ -18,13 +18,15 @@ export const onGet: RequestHandler = async ({ cacheControl, ...requestEvent }) =
     // Max once every 5 seconds, revalidate on the server to get a fresh version of this page
     maxAge: 5,
   });
-  console.log(requestEvent.request);
-  const token = getTokenFromHeader(requestEvent.request.headers.get('Authorization') || '');
-  if(token){
-    console.log(`Token: ${token}`);
-    requestEvent.headers.set('Authorization', `Bearer ${token}`);
-  }
 };
+
+export const useLogin = routeLoader$(async requestEvent => {
+  const token = getTokenFromHeader(requestEvent.request.headers.get('Authorization') || '') ?? requestEvent.cookie.get('access_token')?.value;
+  if(token){
+    return true;
+  }
+  return false;
+});
 
 export const useServerTimeLoader = routeLoader$(() => {
   return {
@@ -48,6 +50,7 @@ export default component$(() => {
 });
 
 const getTokenFromHeader = (authHeader: string): string | null => {
+  //TODO: This is wortless cause we are just getting the token from cookies.
   const parts = authHeader.split(" ");
   if(parts.length === 2 && parts[0] === 'Bearer') {
     return parts[1];
