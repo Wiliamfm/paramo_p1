@@ -1,11 +1,10 @@
 import { $ } from "@builder.io/qwik";
-import { Users } from "@prisma/client";
 import { Fail } from "~/models/FailedValidation";
 import { Success } from "~/models/SuccessValidation";
 import { LoginInput } from "~/models/login";
 import { comparePasswords } from "~/utils/helpers";
 
-export const login = $(async (input: LoginInput): Promise<Success<Users> | Fail> => {
+export const login = $(async (input: LoginInput): Promise<Success<any> | Fail> => {
   const user = null;
 //  const user = await prisma.users.findUnique({
 //    where: {
