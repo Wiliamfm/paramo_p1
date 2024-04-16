@@ -5,7 +5,7 @@ import { TextInput } from '~/components/form/TextInput/text-input';
 import { createJWT } from '~/utils/helpers';
 import { login } from '~/services/AuthAppService';
 import { UserResponse } from '~/models/Response/login.model';
-import { log } from '~/services/LoginService';
+import { log } from '~/services/LogginService';
 
 const useLogin = routeAction$(async (data, requestEvent) => {
   const response = await login(data);
