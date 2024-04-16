@@ -2,7 +2,7 @@ import { $ } from '@builder.io/qwik';
 import { server$ } from '@builder.io/qwik-city';
 import bcrypt from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
-import { UserResponse } from '~/models/Response/login.model';
+import type { UserResponse } from '~/models/Response/login.model';
 import { log } from '~/services/LogginService';
 
 export const hashPassword = server$(async function(password: string){

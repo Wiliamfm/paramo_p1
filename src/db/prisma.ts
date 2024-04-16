@@ -4,6 +4,7 @@ const prismaClientSingleton = () => {
   return new PrismaClient()
 }
 
+/* eslint no-var: 0 */
 declare global {
   var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>
 }
