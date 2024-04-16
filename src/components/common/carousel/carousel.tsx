@@ -8,7 +8,7 @@ interface CardProps {
     url?: string;
   }
 
-export default component$<CardProps>((props) => {
+export default component$<CardProps>(() => {
     return (        
         <div >
     
