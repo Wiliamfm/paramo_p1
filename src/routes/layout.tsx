@@ -4,6 +4,7 @@ import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 
 import Header from "../components/common/header/header";
 import Footer from "../components/common/footer/footer";
+import { isValidJWT } from "~/utils/helpers";
 
 export const head: DocumentHead = {
   title: "Paramo Presenta",
@@ -23,7 +24,10 @@ export const onGet: RequestHandler = async ({ cacheControl, ...requestEvent }) =
 export const useLogin = routeLoader$(async requestEvent => {
   const token = getTokenFromHeader(requestEvent.request.headers.get('Authorization') || '') ?? requestEvent.cookie.get('access_token')?.value;
   if(token){
-    return true;
+    if(await isValidJWT(token)){
+      return true;
+    }
+    return false;
   }
   return false;
 });

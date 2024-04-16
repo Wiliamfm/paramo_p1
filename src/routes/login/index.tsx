@@ -7,7 +7,7 @@ import { login } from '~/services/AuthAppService';
 import { UserResponse } from '~/models/Response/login.model';
 import { log } from '~/services/LogginService';
 
-const useLogin = routeAction$(async (data, requestEvent) => {
+export const useLogin = routeAction$(async (data, requestEvent) => {
   const response = await login(data);
   if(!response.success){
     return requestEvent.fail(response.status, response.error);
@@ -28,7 +28,6 @@ const useLogin = routeAction$(async (data, requestEvent) => {
   });
   requestEvent.json(200, {
     access_token: jwt,
-    token_type: 'bearer',
   });
 },
   zod$(loginRequestSchema)
