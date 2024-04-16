@@ -1,5 +1,4 @@
-#ARG NODE_VERSION=21
-ARG NODE_VERSION=18.18.2
+ARG NODE_VERSION=21
  
 ################################################################################
 # Use node image for base image for all stages.
@@ -23,8 +22,6 @@ COPY package.json /usr/src/app
    #--mount=type=cache,target=/root/.yarn \
    #yarn install --frozen-lockfile
 
-RUN yarn add sharp --ignore-engines
-COPY ./prisma ./prisma
 RUN yarn install --frozen-lockfile
  
 ################################################################################
