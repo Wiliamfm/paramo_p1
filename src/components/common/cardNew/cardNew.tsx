@@ -1,13 +1,11 @@
-import { component$, useSignal, useTask$, $ } from "@builder.io/qwik";
+import { component$, useSignal, $ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import Ima from "/images/prueba1.jpg";
+import Ima from "../../../../public/images/prueba1.jpg";
 
 export const CardNew = component$(
   ({
     title,
-    description,
     id,
-    date,
   }: {
     id: string;
     title: string;

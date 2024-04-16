@@ -10,7 +10,7 @@ export const head: DocumentHead = {
   title: "Paramo Presenta",
 };
 
-export const onGet: RequestHandler = async ({ cacheControl, ...requestEvent }) => {
+export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
   // https://qwik.builder.io/docs/caching/
   cacheControl({

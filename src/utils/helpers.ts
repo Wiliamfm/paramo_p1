@@ -1,12 +1,12 @@
 import { $ } from '@builder.io/qwik';
+import { server$ } from '@builder.io/qwik-city';
 import bcrypt from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
-import { env } from 'process';
 import { UserResponse } from '~/models/Response/login.model';
 import { log } from '~/services/LogginService';
 
-export const hashPassword = $(async (password: string) => {
-  const SALT_ROUNDS = env.NODE_ENV === 'production' ? 10 : 1;
+export const hashPassword = server$(async function(password: string){
+  const SALT_ROUNDS = this.env.get("NODE_ENV ")=== 'production' ? 10 : 1;
   return await bcrypt.hash(password, SALT_ROUNDS);
 });
 
@@ -15,8 +15,8 @@ export const comparePasswords = $(async (password: string, hashedPassord?: strin
   return await bcrypt.compare(password, hash);
 })
 
-export const createJWT = $(async (data: UserResponse) => {
-  const secret = new TextEncoder().encode(env.JWT_SECRET);
+export const createJWT = server$(async function(data: UserResponse){
+  const secret = new TextEncoder().encode(this.env.get("JWT_SECRET"));
   const alg = 'HS256'
 
   const jwt = await new SignJWT({...data})
@@ -28,9 +28,9 @@ export const createJWT = $(async (data: UserResponse) => {
   return jwt;
 })
 
-export const isValidJWT = $(async (token: string): Promise<boolean> => {
+export const isValidJWT = server$(async function(token: string): Promise<boolean>{
   try{
-    const secret = new TextEncoder().encode(env.JWT_SECRET);
+    const secret = new TextEncoder().encode(this.env.get("JWT_SECRET"));
     //This currentrly validate expiration date.
     const jwtInfo = await jwtVerify(token, secret);
     const currentDate = new Date();
