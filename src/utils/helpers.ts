@@ -15,17 +15,13 @@ export const comparePasswords = $(async (password: string, hashedPassord?: strin
 })
 
 export const createJWT = $(async (data: UserResponse) => {
-  //TODO: move to env
-  const secret = new TextEncoder().encode(
-    'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
-  )
+  const secret = new TextEncoder().encode(env.JWT_SECRET);
   const alg = 'HS256'
 
   const jwt = await new SignJWT({...data})
     .setProtectedHeader({ alg })
     .setIssuedAt()
     .setIssuer(data.email)
-    //.setAudience('urn:example:audience')
     .setExpirationTime('2h')
     .sign(secret)
   return jwt;
