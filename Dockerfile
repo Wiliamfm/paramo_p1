@@ -24,6 +24,7 @@ COPY package.json /usr/src/app
    #yarn install --frozen-lockfile
 
 RUN yarn add sharp --ignore-engines
+COPY ./prisma ./prisma
 RUN yarn install --frozen-lockfile
  
 ################################################################################
