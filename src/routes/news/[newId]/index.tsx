@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { $, component$, useStore, useTask$ } from '@builder.io/qwik';
-=======
-import { $, component$, useSignal, useStore, useTask$ } from '@builder.io/qwik';
->>>>>>> 1c2ce5e (adding news and working on newView)
 import { useLocation } from '@builder.io/qwik-city';
 import { NEWS } from '~/utils/newsArray';
 
