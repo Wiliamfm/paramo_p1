@@ -8,10 +8,10 @@ interface CardProps {
     url?: string;
   }
 
-export default component$<CardProps>(() => {
+export default component$((props) => {
     return (        
         <div >
-    
+            <h1>hola</h1>
         </div>
     );
 

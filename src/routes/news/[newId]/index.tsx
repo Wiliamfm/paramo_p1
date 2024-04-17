@@ -1,5 +1,6 @@
 import { $, component$, useStore, useTask$ } from '@builder.io/qwik';
 import { useLocation } from '@builder.io/qwik-city';
+import Carousel2 from '~/components/common/carousel/carousel2';
 import { NEWS } from '~/utils/newsArray';
 
 export default component$(() => {
@@ -52,6 +53,20 @@ export default component$(() => {
                     <h1 class="text-center font-bold text-3xl">{show.name}</h1>
                 </div>
                 <div class="w-full text-justify"><p>{show.description}</p></div>
+                <div class="w-full ">
+                <Carousel2/>
+
+                {/* share section */}
+                <div class="w-full flex justify-center items-center">
+                    <div class="w-[50%] flex border-t-2 border-black">
+                        <h3 class="">SHARE ARTICLE:</h3>
+                        <p>face</p>
+                        <p>X</p>
+                        <p>mail</p>
+                    </div>
+                </div>
+
+                </div>
             </div>
         );
     } else {
