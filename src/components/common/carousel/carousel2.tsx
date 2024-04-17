@@ -12,7 +12,6 @@ export default component$(() => {
     imageSelector: 0,
   });
     const handleButtonsCarousel = $((direction:string)=>{
-        preventdefault:onclick;
         if(direction=="left"){
             if(state.imageSelector===0){
                 state.imageSelector = state.images.length-1

@@ -1,14 +1,6 @@
 import { component$ } from "@builder.io/qwik"
 
-
-interface CardProps {
-    ImgUrl: string;
-    title: string;
-    description?: string;
-    url?: string;
-  }
-
-export default component$((props) => {
+export default component$(() => {
     return (        
         <div >
             <h1>hola</h1>
