@@ -41,7 +41,7 @@ export const useServerTimeLoader = routeLoader$(() => {
 export default component$(() => {
 
   return (
-    <div class="flex flex-col dark:bg-black h-screen w-screen overflow-y-scroll">
+    <div class="flex flex-col dark:bg-black h-screen w-screen overflow-y-scroll overflow-x-hidden">
       <Header />
       <main>
         <div class="">

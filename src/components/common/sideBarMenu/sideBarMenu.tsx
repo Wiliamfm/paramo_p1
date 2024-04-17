@@ -1,9 +1,10 @@
-import { component$, useSignal } from '@builder.io/qwik';
+import { Signal, component$, useSignal } from '@builder.io/qwik';
 import { NavLink } from '../navLink/navLink';
 import { useLogin } from '~/routes/layout';
 
 export interface SideBarMenuProps {
-  id: string;
+  id: string,
+  modalFormState:Signal
 }
 
 export const SideBarMenu = component$<SideBarMenuProps>((props) => {
@@ -24,7 +25,7 @@ export const SideBarMenu = component$<SideBarMenuProps>((props) => {
                 search
               </span>
             </button>
-            <button type="button" class="p-2 border-r-2 border-r-black dark:border-r-white">
+            <button type="button" class="p-2 border-r-2 border-r-black dark:border-r-white" onClick$={()=>props.modalFormState.value=!props.modalFormState.value}>
               Encuestas
             </button>
             <button class="p-2" onClick$={() => {
