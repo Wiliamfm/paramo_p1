@@ -20,6 +20,9 @@ export default component$(() => {
             }
             state.imageSelector--
 
+          }});
+          
+
   const updateImageSelector = $((direction:any) => {
     if (!state.transitioning) {
       const totalImages = state.images.length;
