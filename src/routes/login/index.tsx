@@ -1,10 +1,11 @@
 import { component$ } from '@builder.io/qwik';
-import { routeAction$, zod$ } from '@builder.io/qwik-city';
+import { Form, routeAction$, zod$ } from '@builder.io/qwik-city';
 import { loginRequestSchema } from '~/schemas/login.schema';
 import { createJWT } from '~/utils/helpers';
 import { login } from '~/services/AuthAppService';
 import { UserResponse } from '~/models/Response/login.model';
 import { log } from '~/services/LogginService';
+import { TextInput } from '~/components/form/TextInput/text-input';
 
 export const useLogin = routeAction$(async (data, requestEvent) => {
   const response = await login(data);
@@ -32,11 +33,21 @@ export const useLogin = routeAction$(async (data, requestEvent) => {
   zod$(loginRequestSchema)
 );
 
+  {/*
+  <div class="w-full">
+        <div data-tf-live="01HVP5JQJAQV43656VTFHQWPDB"></div><script src="//embed.typeform.com/next/embed.js"></script>
+    </div>
+  */}
 export default component$(() => {
 
   return (
-    <div class="w-full">
-        <div data-tf-live="01HVP5JQJAQV43656VTFHQWPDB"></div><script src="//embed.typeform.com/next/embed.js"></script>
-    </div>
+    <Form class="max-w-sm mx-auto my-10">
+      <TextInput name="email" type="email" value="" error="" label="Email:">
+        <span class="material-symbols-outlined">
+          mail
+        </span>
+      </TextInput>
+      <TextInput name="password" type="password" value="" error="" label="Password:"/>
+    </Form>
   );
 });
