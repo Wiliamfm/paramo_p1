@@ -4,7 +4,6 @@ import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 
 import Header from "../components/common/header/header";
 import Footer from "../components/common/footer/footer";
-import { isValidJWT } from "~/utils/helpers";
 
 export const head: DocumentHead = {
   title: "Paramo Presenta",
@@ -20,17 +19,6 @@ export const onGet: RequestHandler = async ({ cacheControl }) => {
     maxAge: 5,
   });
 };
-
-export const useLogin = routeLoader$(async requestEvent => {
-  const token = getTokenFromHeader(requestEvent.request.headers.get('Authorization') || '') ?? requestEvent.cookie.get('access_token')?.value;
-  if(token){
-    if(await isValidJWT(token)){
-      return true;
-    }
-    return false;
-  }
-  return false;
-});
 
 export const useServerTimeLoader = routeLoader$(() => {
   return {
@@ -52,12 +40,3 @@ export default component$(() => {
     </div>
   );
 });
-
-const getTokenFromHeader = (authHeader: string): string | null => {
-  //TODO: This is wortless cause we are just getting the token from cookies.
-  const parts = authHeader.split(" ");
-  if(parts.length === 2 && parts[0] === 'Bearer') {
-    return parts[1];
-  }
-  return null;
-}

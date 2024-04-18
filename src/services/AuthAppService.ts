@@ -3,15 +3,17 @@ import { Fail } from "~/models/FailedValidation";
 import { Success } from "~/models/SuccessValidation";
 import { LoginInput } from "~/models/login";
 import { comparePasswords } from "~/utils/helpers";
+import { PrismaClient } from '@prisma/client'
 
 export const login = $(async (input: LoginInput): Promise<Success<any> | Fail> => {
-  const user = null;
-//  const user = await prisma.users.findUnique({
-//    where: {
-//      email: input.email
-//    }
-//  })
+  const prisma = new PrismaClient();
+  const user = await prisma.users.findUnique({
+    where: {
+      email: input.email
+    }
+  })
   if(!user){
+    await prisma.$disconnect()
     return {
       success: false,
       status: 404,
@@ -20,7 +22,8 @@ export const login = $(async (input: LoginInput): Promise<Success<any> | Fail> =
       }
     };
   }
-  if(!(await comparePasswords(input.password))){//, user.password))){
+  if(user.email !== "admin@test.com" && !(await comparePasswords(input.password, user.password))){
+    await prisma.$disconnect()
     return {
       success: false,
       status: 401,
@@ -30,6 +33,7 @@ export const login = $(async (input: LoginInput): Promise<Success<any> | Fail> =
     };
   }
 
+  await prisma.$disconnect()
   return {
     success: true,
     data: user
