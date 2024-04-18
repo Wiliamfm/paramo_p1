@@ -42,7 +42,7 @@ export default component$(() => {
 
   return (
     <div class="w-full">
-        <div data-tf-live="01HVP5JQJAQV43656VTFHQWPDB"></div><script src="//embed.typeform.com/next/embed.js"></script>
+        {/* <div data-tf-live="01HVP5JQJAQV43656VTFHQWPDB"></div><script src="//embed.typeform.com/next/embed.js"></script> */}
     </div>
   );
 });

@@ -18,7 +18,7 @@ export default component$<HeaderProps>(() => {
     <div class="relative h-full w-full">
       {/* Modal Form */}
       {modalFormState.value ? (
-        <div class=" fixed left-0 top-0 z-50 flex h-[100vh] w-[100vw] items-center justify-center bg-black bg-opacity-70">
+        <div class={" fixed -left-[100vw] top-0 z-50 flex h-[100vh] w-[100vw] items-center justify-center bg-black bg-opacity-70 transform duration-200 $"}>
           <div
             class="absolute right-[5%] top-[10%] text-white"
             onClick$={() => (modalFormState.value = !modalFormState.value)}
@@ -62,7 +62,7 @@ export default component$<HeaderProps>(() => {
                 MENU
               </button>
             </div>
-            <div class="hidden flex-auto p-2 text-center md:block md:border-r-2 md:border-r-black dark:md:border-r-white">
+            <div class="hidden flex-auto p-2 text-center font-[karla] md:block md:border-r-2 md:border-r-black dark:md:border-r-white">
               PARAMO PRESENTA LOGO
             </div>
             <button

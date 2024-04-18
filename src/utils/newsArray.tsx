@@ -2,7 +2,7 @@ export const NEWS = [
     {
         id: "1",
         name: "Apple presenta el nuevo iPhone 15",
-        description: "Apple sorprende al mundo con el lanzamiento del iPhone 15, el último modelo de su icónico teléfono inteligente.",
+        description: "Apple sorprende al mundo con el lanzamiento del iPhone 15, el último modelo de su icónico teléfono inteligente. Apple sorprende al mundo con el lanzamiento del iPhone 15, el último modelo de su icónico teléfono inteligente. Apple sorprende al mundo con el lanzamiento del iPhone 15, el último modelo de su icónico teléfono inteligente.",
         category: ["noticias", "marcas", "tecnología"],
         date: "10 de septiembre del 2024"
     },
