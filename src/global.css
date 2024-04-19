@@ -17,11 +17,5 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* .newContainer:hover || .newContainerImage {
-  transform: scale(1.2);
-} */
-.prueba img{
-  width: 100%;
-  height: auto; 
-  display: block;
-}
+
+

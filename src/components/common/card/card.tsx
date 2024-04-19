@@ -19,7 +19,8 @@ export const Card = component$(
     });
 
     return (
-      <Link
+      // revisar Link
+      <a
         href={`/news/${id}`}
         class="flex h-[230px] w-full items-center justify-center transition-all duration-[0.5s] ease-in-out hover:bg-black hover:text-white md:h-[260px] "
         onMouseEnter$={async () => {
@@ -59,7 +60,7 @@ export const Card = component$(
             </div>
           </div>
         </div>
-      </Link>
+      </a>
     );
   },
 );
