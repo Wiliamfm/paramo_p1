@@ -1,5 +1,6 @@
 import { Signal, component$, useSignal } from '@builder.io/qwik';
 import { NavLink } from '../navLink/navLink';
+import { isBrowser } from '@builder.io/qwik/build';
 
 export interface SideBarMenuProps {
   id: string,
@@ -8,7 +9,7 @@ export interface SideBarMenuProps {
 
 export const SideBarMenu = component$<SideBarMenuProps>((props) => {
   const isDark = useSignal(false);
-  const loginSignal = {value: true};
+  const loginSignal = {value: false};
 
   return (
     <div id={props.id} class="fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800 dark:text-white" tabIndex={-1} aria-labelledby="drawer-navigation-label">
