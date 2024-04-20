@@ -6,7 +6,7 @@ import Carousel from "~/components/common/detailsNew/carousel/carousel";
 import { DescriptionComponent } from "~/components/common/detailsNew/description/description";
 import { SubtitleComponent } from "~/components/common/detailsNew/subtitle/subtitle";
 import { TitleComponent } from "~/components/common/detailsNew/title/title";
-import { VideoComponent } from "~/components/common/detailsNew/video";
+import { VideoComponent } from "~/components/common/detailsNew/video/video";
 import { NEWS } from "~/utils/newsArray";
 
 export default component$(() => {
