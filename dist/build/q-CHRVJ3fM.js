@@ -1,0 +1,1 @@
+import{r as o,l as r,k as e,_ as t}from"./q-DPFv6FGW.js";import{J as a}from"./q-_PqAYfkm.js";const i={title:"Paramo Presenta"},l=()=>{throw"Symbol removed by Qwik Optimizer, it can not be called from current platform"},_=a(r("s_ethUxoEgFR4")),n=o(e(()=>t(()=>import("./q-B4oFiZDv.js"),[]),"s_VKFlAWJuVm8"));export{n as default,i as head,l as onGet,_ as useServerTimeLoader};

@@ -1,8 +1,8 @@
 # Build
-/dist
+*/dist
 /lib
 /lib-types
-/server
+*/server
 bun.lockb
 package-lock.json
 
@@ -44,3 +44,8 @@ lerna-debug.log*
 # Yarn
 .yarn/*
 !.yarn/releases
+
+#BACK
+
+back/obj
+back/bin
