@@ -22,6 +22,7 @@ export default component$(() => {
   useVisibleTask$(() => {
     initFlowbite();
   });
+  
 
   return (
     <QwikCityProvider>
