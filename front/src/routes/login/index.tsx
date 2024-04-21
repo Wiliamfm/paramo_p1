@@ -1,50 +1,12 @@
-import { ContextId, component$, createContextId, useStore } from "@builder.io/qwik";
-import { isBrowser } from '@builder.io/qwik/build';
-import { Form, routeAction$, useLocation, zod$ } from "@builder.io/qwik-city";
+import { component$, useStore } from "@builder.io/qwik";
+import { Form, routeAction$, zod$ } from "@builder.io/qwik-city";
 import { LoginInput } from "~/models/login";
 import { loginRequestSchema } from "~/schemas/login.schema";
 import { log } from "~/services/LogginService";
-import { AuthCookie } from "~/models/auth.models";
-import { createAdminUser, supabase } from "~/utils/supabase";
 import { Fail } from "~/models/FailedValidation";
-import { Success } from "~/models/SuccessValidation";
-import { User } from "@supabase/supabase-js";
+import { createAdminUser, supabase } from "~/utils/supabase";
 
-//export let AuthContext: ContextId<string>;
- 
 export const useLogin = routeAction$(async (data, requestEvent) => {
-  /*
-  const baseUrl = requestEvent.env.get("BASE_URL") ? requestEvent.env.get("BASE_URL") : "http://backend:5026";
-  const response = await fetch(`${baseUrl}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  if(response.status !== 200)
-  {
-    return requestEvent.fail(response.status, response.text());
-  }
-  const cookie = getCookieFromHeaders(response.headers)
-  if(!cookie){
-    return {
-      success: false,
-    }
-  }
-  //AuthContext= createContextId(`auth_${access_token}`);
-  requestEvent.cookie.set("access_token", cookie.access_token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-  });
-  log(`User ${data.email} logged in: [TOKEN]: ${cookie.access_token}`);
-  return {
-    token: cookie.access_token,
-    user: data.email,
-    success: cookie.access_token ? true : false,
-  };
-  */
   const response = await supabase.auth.signInWithPassword({
     email: data.email,
     password: data.password
@@ -66,13 +28,7 @@ export default component$(() => {
   const states = useStore({
     data: { email: "", password: "" } as LoginInput,
   });
-  const location = useLocation();
-
   const loginAction = useLogin();
-
-  if(loginAction.value?.failed){
-    console.log(loginAction.value);
-  }
 
   return (
     <div class="flex items-start justify-center min-h-[70vh] w-full p-3 ">
@@ -111,26 +67,3 @@ export default component$(() => {
     </div>
   );
 });
-
-const getCookieFromHeaders = (headers: Headers): AuthCookie | null => {
-  try{
-    const cookieHeader= headers.get("set-cookie");
-    if(!cookieHeader)
-    {
-      return null;
-    }
-    const tokenPart = cookieHeader.split(";")[0];
-    const access_token = tokenPart.split("=")[1]
-    const authCookie: AuthCookie = {
-        access_token: access_token,
-        sameSite: "strict",
-        secure: true,
-        httpOnly: true
-    }
-    return authCookie;
-  }catch(error)
-  {
-    console.error("Unable to get cookie from headers:\n", error);
-    return null;
-  }
-}

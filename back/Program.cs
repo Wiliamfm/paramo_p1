@@ -1,56 +1,81 @@
+using Microsoft.EntityFrameworkCore;
+using paramo.database;
 using paramo.entities;
 using paramo.entities.inputs;
 using LoginInput = paramo.entities.inputs.LoginInput;
 
 var builder = WebApplication.CreateBuilder(args);
+//TODO: Move this to a config file.
+builder.Services.AddDbContext<ParamoDbContext>(options =>
+{
+  options.UseSqlite("Data Source=paramo.db");
+});
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+  //TODO: Check this.
+  app.UseExceptionHandler("/Error");
+  app.UseHsts();
+}
+else
+{
+  app.UseDeveloperExceptionPage();
+  app.UseMigrationsEndPoint();
+}
 
 app.MapPost("/login", Login);
 
 var newsGroup = app.MapGroup("/news");
 
+//TODO: Move methods to services.
 newsGroup.MapPost("/", Create);
 newsGroup.MapPut("/", Update);
 app.Run();
 
 
-static IResult Login(LoginInput input)
+static IResult Login(HttpContext ctx, LoginInput input)
 {
   //TODO: Create JWT and save it in memory.
   if(input.Email != "admin@test.com")
   {
     return Results.NotFound();
   }
-  var token = "secret-token";
-  return Results.Ok(token);
+  var token = "test-token";
+  ctx.Response.Cookies.Append("access_token", token, new CookieOptions
+  {
+    HttpOnly = true,
+    SameSite = SameSiteMode.Strict,
+    Secure = true
+  });
+  return Results.Ok();
 }
 
-static IResult Create(NewsInput input)
+static async Task<IResult> Create(NewsInput input, ParamoDbContext db)
 {
-  var videos = "";
-  var images = "";
+  //TODO: Cleanup inputs.
+  var news = await db.News.Where(n => n.Title == input.Title).FirstOrDefaultAsync();
+  if(news != null)
+  {
+    return TypedResults.BadRequest("Title already exists.");
+  }
   if(string.IsNullOrEmpty(input.Title) || string.IsNullOrEmpty(input.Content) || string.IsNullOrEmpty(input.BannerImage))
   {
-    return Results.BadRequest();
+    return TypedResults.BadRequest();
   }
-  if(input.Videos != null && input.Videos.Any())
-  {
-    videos = string.Join(", ", input.Videos);
-  }
-  if(input.Images != null && input.Images.Any())
-  {
-    images = string.Join(",", input.Images);
-  }
-  News newNew = new(title: input.Title, content: input.Content, bannerImage: input.BannerImage);
-  newNew.Videos = videos;
-  newNew.Images = images;
-  //TODO: CALL LDB TO ACTUALLY CREATE NEW
-  newNew.Id = new Random().Next(1, 100);
-  return Results.Created($"/news/{newNew.Id}", newNew);
+  News newNews = new(title: input.Title, content: input.Content, bannerImage: input.BannerImage);
+  newNews.Videos = newNews.SetVideosFromArray(input.Videos);
+  newNews.Images = newNews.SetImagesFromArray(input.Images);
+  db.News.Add(newNews);
+  await db.SaveChangesAsync();
+  return TypedResults.Created($"/news/{newNews.Id}", newNews);
 }
 
 static IResult Update(NewsInput input)
 {
+  //TODO: Use typedReults.
   //TODO: CALL DB TO ACTUALLY GET NEW.
   if(false){
     return Results.NotFound();
