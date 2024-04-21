@@ -1,0 +1,1 @@
+import{a as l,M as a,O as s}from"./q-DPFv6FGW.js";import{a as t}from"./q-_PqAYfkm.js";const i=()=>{l({logged:!1,roles:[],token:"",name:""}),l({article:""});const n=t();return a("div",null,{class:" min-h-[70vh] w-full p-3 "},a("h1",null,null,["editar: ",s(o=>o.params.id,[n])],3,null),3,"A6_0")};export{i as s_Fu4zU6xktxw};

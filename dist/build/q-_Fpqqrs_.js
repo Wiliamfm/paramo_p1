@@ -1,0 +1,1 @@
+import{M as l}from"./q-DPFv6FGW.js";const n=t=>l("div",null,{class:"flex w-full items-center justify-center"},l("img",null,{class:"w-full",width:"2048",height:"1080",src:"https://itsbetterlive.livenationforbrands.com/wp-content/uploads/2024/04/Dreamville-fest.jpeg",alt:"banner"},null,3,null),3,"z2_0");export{n as s_65H6iL8y1Cc};
