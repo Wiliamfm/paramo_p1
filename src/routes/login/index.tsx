@@ -1,10 +1,12 @@
-import { component$, useStore } from "@builder.io/qwik";
+import { component$, useStore, useContext } from "@builder.io/qwik";
 import { Form, routeAction$, zod$ } from "@builder.io/qwik-city";
 import { LoginInput } from "~/models/login";
 import { loginRequestSchema } from "~/schemas/login.schema";
 import { log } from "~/services/LogginService";
 import { Fail } from "~/models/FailedValidation";
 import { createAdminUser, supabase } from "~/utils/supabase";
+import { token } from "~/root";
+
 
 export const useLogin = routeAction$(async (data, requestEvent) => {
   const response = await supabase.auth.signInWithPassword({
@@ -20,15 +22,21 @@ export const useLogin = routeAction$(async (data, requestEvent) => {
     return requestEvent.fail(error.status, error);
   }
   log(`User ${response.data.user.email} logged in: [TOKEN]: ${response.data.session?.access_token}`);
-  throw requestEvent.redirect(302, "/");
+
+  throw requestEvent.redirect(302, "/admin");
 },
 zod$(loginRequestSchema));
 
 export default component$(() => {
+  const tok = useContext(token) 
+  
+  console.log(tok.value)
   const states = useStore({
     data: { email: "", password: "" } as LoginInput,
   });
   const loginAction = useLogin();
+
+
 
   return (
     <div class="flex items-start justify-center min-h-[70vh] w-full p-3 ">

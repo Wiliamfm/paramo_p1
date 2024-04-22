@@ -1,9 +1,14 @@
-import { $, Signal, component$, useSignal, useTask$ } from "@builder.io/qwik";
+import {
+  $,
+  Signal,
+  component$,
+  useSignal,
+  useStore,
+  useTask$,
+} from "@builder.io/qwik";
 import { NavLink } from "../navLink/navLink";
 import ImgParamoLogo from "../../../../public/images/paramo_logo.png?jsx";
 import { SideBarMenu } from "../sideBarMenu/sideBarMenu";
-import { error } from "console";
-
 
 interface HeaderProps {}
 
@@ -13,34 +18,70 @@ const TypeFormView = component$(
     dataTfLive,
   }: {
     typeFormViewState: Signal;
-    dataTfLive: Signal;
+    dataTfLive: string;
   }) => {
-    return (
-      <div
-        class={` fixed -left-[100vw] top-0 z-50  h-[100vh] w-[100vw]  bg-red-500 bg-opacity-70 transform duration-200 ${typeFormViewState.value ? "translate-x-[100vw]" : ""}`}
-      >
-        <div class="flex items-center justify-center relative w-full h-full">
-          <button
-            class="absolute bg-purple-500 top-5 right-5 text-white"
-            onClick$={() => {
-              typeFormViewState.value = !typeFormViewState.value;
-            }}
+    try{
+      if (dataTfLive) {
+        return (
+          <div
+            class={` fixed -left-[100vw] top-0 z-50  h-[100vh] w-[100vw]  bg-red-500 bg-opacity-70 transform duration-200 ${typeFormViewState.value ? "translate-x-[100vw]" : ""}`}
           >
-            X
-          </button>
-          <div class="w-[80%] h-[90%] bg-white">
-            {/* <div data-tf-live={dataTfLive}></div>
-          <script src=""></script> */}
-            <p>{dataTfLive.value}</p>
+            <div class="flex items-center justify-center relative w-full h-full">
+              <button
+                class="absolute bg-purple-500 top-5 right-5 text-white"
+                onClick$={() => {
+                  typeFormViewState.value = !typeFormViewState.value;
+                }}
+              >
+                X
+              </button>
+              <div class="w-[80%] h-[90%] bg-white">
+                {/* 01HW175B1ZJ5BP9EHYRS309X9C */}
+                {/* <div>{dataTfLive}</div> */}
+                <div
+                  data-tf-live={dataTfLive}
+                  data-tf-hide-headers
+                  data-tf-hide-footer
+                  data-tf-opacity="0"
+                  id="dataTfLive"
+                ></div>
+                <script src="//embed.typeform.com/next/embed.js"></script>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    );
+        );
+      } else {
+        return (
+          <div
+            class={` fixed -left-[100vw] top-0 z-50  h-[100vh] w-[100vw]  bg-red-500 bg-opacity-70 transform duration-200 ${typeFormViewState.value ? "translate-x-[100vw]" : ""}`}
+          >
+            <div class="flex items-center justify-center relative w-full h-full">
+              <button
+                class="absolute bg-purple-500 top-5 right-5 text-white"
+                onClick$={() => {
+                  typeFormViewState.value = !typeFormViewState.value;
+                }}
+              >
+                X
+              </button>
+              <div class="w-[80%] h-[90%] bg-white">
+                {/* 01HW175B1ZJ5BP9EHYRS309X9C */}
+                <div>{dataTfLive}</div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+    }catch(err){
+      console.log("hola")
+    }
+    
   }
 );
 type formCreation = {
   name: string;
-  dataTfLive: "01HW175B1ZJ5BP9EHYRS309X9C";
+  dataTfLive: "";
   src: "//embed.typeform.com/next/embed.js";
 };
 
@@ -51,7 +92,7 @@ export default component$<HeaderProps>(() => {
   const forms = useSignal([
     {
       name: "formulario 1",
-      dataTfLive: "01HW175B1ZJ5BP9EHYRS309X9C",
+      dataTfLive: "",
       src: "//embed.typeform.com/next/embed.js",
     },
   ]);
@@ -59,30 +100,36 @@ export default component$<HeaderProps>(() => {
   const typeFormViewId = useSignal("");
 
   const handleAddForm = $(async () => {
+    new Promise<{ name: string; id: string }>((resolve, reject) => {
+      let name = window.prompt("el nombre del formulario") || "";
+      let id = window.prompt("digite el id del form") || "";
+      resolve({ name: name, id: id });
+    })
+      .then(async(val) => {
+        
 
-    new Promise<{ name: string; id: string }>((resolve,reject)=>{
-      let name = (window.prompt("el nombre del formulario")) || "";
-      let id = (window.prompt("digite el id del form")) || "";
-      resolve({name:name,id:id})
-    }).then((val)=>{
-      if(val?.name =="" || val?.id==""){
-        return window.alert("no se pudo crear, algun campo vacio")
+        if (val?.name == "" || val?.id == "") {
+          return window.alert("no se pudo crear, algun campo vacio");
+        }
 
-      }else{
-        forms.value = [
-          ...forms.value,
-          {
-            dataTfLive: val.id,
-            name: val.name,
-            src: "//embed.typeform.com/next/embed.js",
-          },
-        ];
-      }
-      
-    }).catch((err)=> console.log(err)
+        let response  = await fetch(`https://api.typeform.com/forms/${val.id}/responses`,{
+          headers:{"Authorization":"Bearer tfp_LKSEEmi2mwiLbCk5F2hD6WmBEFCxNgJ6JqydycJJhx1_3pZrBuQ5Wtzfcs"}
+        })
+        if(!response.ok){
+          return window.alert("no se encontro el form")
+        }
 
-    
-    );
+          forms.value = [
+            ...forms.value,
+            {
+              dataTfLive: val.id,
+              name: val.name,
+              src: "//embed.typeform.com/next/embed.js",
+            },
+          ];
+        
+      })
+      .catch((err) => console.log(err));
   });
 
   return (
@@ -113,7 +160,10 @@ export default component$<HeaderProps>(() => {
               </button>
             );
           })}
-          <button class="w-[200px] h-[50px] text-white border-2  bg-blue-500 rounded-xl font-bold" onClick$={() => handleAddForm()}>
+          <button
+            class="w-[200px] h-[50px] text-white border-2  bg-blue-500 rounded-xl font-bold"
+            onClick$={() => handleAddForm()}
+          >
             Agregar Formulario
           </button>
         </div>
@@ -122,7 +172,7 @@ export default component$<HeaderProps>(() => {
 
       <TypeFormView
         typeFormViewState={typeFormViewState}
-        dataTfLive={typeFormViewId}
+        dataTfLive={typeFormViewId.value}
       />
 
       {/*  */}
