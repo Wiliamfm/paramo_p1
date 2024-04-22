@@ -13,45 +13,45 @@ type DataType = {
   description: string;
 };
 
-const ModularComponent = component$(({ type }: { type: string }) => {
+const ModularComponent = component$(({ component }: { component: co }) => {
   const isOpen = useSignal(true);
   const handleModuleComponent = $(() => {
-    if (type == "title") {
+    if (component.type == "title") {
       return (
         <div class="flex flex-col">
           <label for="">ingrese titulo del articulo: </label>
           <input type="text" placeholder="titulo" />
         </div>
       );
-    } else if (type == "subtitle") {
+    } else if (component.type == "subtitle") {
       return (
         <div class="flex flex-col">
           <label for="">ingrese un subtitulo: </label>
           <input type="text" placeholder="subtitulo" />
         </div>
       );
-    } else if (type == "description") {
+    } else if (component.type == "description") {
       return (
         <div class="flex flex-col">
           <label for="">ingrese una description: </label>
           <input type="text" placeholder="text" />
         </div>
       );
-    } else if (type == "banner") {
+    } else if (component.type == "banner") {
       return (
         <div class="flex flex-col">
           <label for="">ingrese una imagen para el banner: </label>
           <input type="file" />
         </div>
       );
-    } else if (type == "carousel") {
+    } else if (component.type == "carousel") {
       return (
         <div class="flex flex-col">
           <label for="">seleccione imagenes para el carrousel: </label>
           <input type="file" />
         </div>
       );
-    } else if (type == "video") {
+    } else if (component.type == "video") {
       return (
         <div class="flex flex-col">
           <label for="">Ingrese url del video: </label>
@@ -69,7 +69,7 @@ const ModularComponent = component$(({ type }: { type: string }) => {
   return (
     <div class="flex w-[80%] flex-col  items-center justify-center">
       <div class="flex h-7 w-full justify-between bg-black text-white">
-        <div>{type}</div>
+        <div>{component.type}</div>
         <div class="" onClick$={() => (isOpen.value = !isOpen.value)}>
           {isOpen.value ? <p>^</p> : <p>V</p>}
         </div>
@@ -80,20 +80,23 @@ const ModularComponent = component$(({ type }: { type: string }) => {
     </div>
   );
 });
+type co = {
+  type:string,
+  value: any,
+}
 
 export default component$(() => {
   const states = useStore({
-    data: { name: "", date: "", description: "" } as DataType,
     agregatorState: false,
-    components: [] as string[],
+    components: [] as co[],
   });
 
-  const handleComponents = $((component: string) => {
-    return <ModularComponent type={component} />;
+  const handleComponents = $((component: co) => {
+    return <ModularComponent component={component} />;
   });
 
   const handleOnSubmit = $((event: Event) => {
-    console.log(states.data);
+    console.log(states.components);
   });
 
   return (
@@ -123,7 +126,7 @@ export default component$(() => {
               </div>
               <div
                 onClick$={() => {
-                  states.components.push("title");
+                  states.components.push({type:"title",value:"Jueputa que rico"});
                   states.agregatorState = false;
                 }}
               >
@@ -131,7 +134,7 @@ export default component$(() => {
               </div>
               <div
                 onClick$={() => {
-                  states.components.push("subtitle");
+                  states.components.push({type:"subtitle",value:"Jueputa que rico"});
                   states.agregatorState = false;
                 }}
               >
@@ -139,7 +142,7 @@ export default component$(() => {
               </div>
               <div
                 onClick$={() => {
-                  states.components.push("description");
+                  states.components.push({type:"description",value:"Jueputa que rico"});
                   states.agregatorState = false;
                 }}
               >
@@ -147,7 +150,7 @@ export default component$(() => {
               </div>
               <div
                 onClick$={() => {
-                  states.components.push("banner");
+                  states.components.push({type:"banner",value:"Jueputa que rico"});
                   states.agregatorState = false;
                 }}
               >
@@ -155,7 +158,7 @@ export default component$(() => {
               </div>
               <div
                 onClick$={() => {
-                  states.components.push("carousel");
+                  states.components.push({type:"carousel",value:"Jueputa que rico"});
                   states.agregatorState = false;
                 }}
               >
@@ -163,7 +166,7 @@ export default component$(() => {
               </div>
               <div
                 onClick$={() => {
-                  states.components.push("video");
+                  states.components.push({type:"video",value:"Jueputa que rico"});
                   states.agregatorState = false;
                 }}
               >
@@ -172,7 +175,7 @@ export default component$(() => {
             </div>
           </div>
           {/* submit button */}
-          <button disabled={states.components.length === 0}  class={`fixed bottom-[10%] right-[5%] ${states.components.length === 0?"bg-gray-400":"bg-green-500"} `} onClick$={()=>console.log("hola")}>
+          <button disabled={states.components.length === 0}  class={`fixed bottom-[10%] right-[5%] ${states.components.length === 0?"bg-gray-400":"bg-green-500"} `} onClick$={handleOnSubmit}>
                 confirmar
           </button>
 

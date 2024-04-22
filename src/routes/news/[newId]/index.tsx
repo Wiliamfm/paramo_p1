@@ -57,7 +57,7 @@ export default component$(() => {
         {/* carousel1 */}
         <Carousel />
         {/* Subtitle */}
-        <SubtitleComponent value={"William es gei?"}/>
+        <SubtitleComponent value={"subtitulo de prueba"}/>
         {/* Description */}
         <DescriptionComponent value={"segun estudios sisas, "+show.description}/>  
         {/* Video */}

@@ -1,0 +1,1 @@
+import{P as l,M as s}from"./q-C3sXE1pK.js";const r=t=>l("div",null,{class:"flex h-[15vh] w-[90%] items-center justify-center  "},l("h1",null,{class:"w-full text-left text-2xl font-bold"},s(e=>e.value,[t]),3,null),3,"br_0");export{r as s_JZOa8d0RXfs};

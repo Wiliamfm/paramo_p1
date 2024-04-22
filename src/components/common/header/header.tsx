@@ -1,38 +1,130 @@
-import { $, component$, useSignal } from "@builder.io/qwik";
+import { $, Signal, component$, useSignal, useTask$ } from "@builder.io/qwik";
 import { NavLink } from "../navLink/navLink";
 import ImgParamoLogo from "../../../../public/images/paramo_logo.png?jsx";
 import { SideBarMenu } from "../sideBarMenu/sideBarMenu";
+import { error } from "console";
+
 
 interface HeaderProps {}
+
+const TypeFormView = component$(
+  ({
+    typeFormViewState,
+    dataTfLive,
+  }: {
+    typeFormViewState: Signal;
+    dataTfLive: Signal;
+  }) => {
+    return (
+      <div
+        class={` fixed -left-[100vw] top-0 z-50  h-[100vh] w-[100vw]  bg-red-500 bg-opacity-70 transform duration-200 ${typeFormViewState.value ? "translate-x-[100vw]" : ""}`}
+      >
+        <div class="flex items-center justify-center relative w-full h-full">
+          <button
+            class="absolute bg-purple-500 top-5 right-5 text-white"
+            onClick$={() => {
+              typeFormViewState.value = !typeFormViewState.value;
+            }}
+          >
+            X
+          </button>
+          <div class="w-[80%] h-[90%] bg-white">
+            {/* <div data-tf-live={dataTfLive}></div>
+          <script src=""></script> */}
+            <p>{dataTfLive.value}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+type formCreation = {
+  name: string;
+  dataTfLive: "01HW175B1ZJ5BP9EHYRS309X9C";
+  src: "//embed.typeform.com/next/embed.js";
+};
 
 export default component$<HeaderProps>(() => {
   const isDark = useSignal(false);
   const sideBarMenuRef = useSignal<Element>();
   const modalFormState = useSignal(false);
+  const forms = useSignal([
+    {
+      name: "formulario 1",
+      dataTfLive: "01HW175B1ZJ5BP9EHYRS309X9C",
+      src: "//embed.typeform.com/next/embed.js",
+    },
+  ]);
+  const typeFormViewState = useSignal(false);
+  const typeFormViewId = useSignal("");
 
-  const handleForm = $(() => {
-    modalFormState.value = !modalFormState.value;
+  const handleAddForm = $(async () => {
+
+    new Promise<{ name: string; id: string }>((resolve,reject)=>{
+      let name = (window.prompt("el nombre del formulario")) || "";
+      let id = (window.prompt("digite el id del form")) || "";
+      resolve({name:name,id:id})
+    }).then((val)=>{
+      if(val?.name =="" || val?.id==""){
+        return window.alert("no se pudo crear, algun campo vacio")
+
+      }else{
+        forms.value = [
+          ...forms.value,
+          {
+            dataTfLive: val.id,
+            name: val.name,
+            src: "//embed.typeform.com/next/embed.js",
+          },
+        ];
+      }
+      
+    }).catch((err)=> console.log(err)
+
+    
+    );
   });
 
   return (
     <div class="relative h-full w-full">
       {/* Modal Form */}
-      {modalFormState.value ? (
-        <div class={" fixed -left-[100vw] top-0 z-50 flex h-[100vh] w-[100vw] items-center justify-center bg-black bg-opacity-70 transform duration-200 $"}>
-          <div
-            class="absolute right-[5%] top-[10%] text-white"
-            onClick$={() => (modalFormState.value = !modalFormState.value)}
-          >
-            X
-          </div>
-          <div class="h-[80%] w-[80%] bg-white">
-            <div data-tf-live="01HVP5JQJAQV43656VTFHQWPDB"></div>
-            <script src="//embed.typeform.com/next/embed.js"></script>
-          </div>
+
+      <div
+        class={` fixed -left-[100vw] top-0 z-50 flex h-[100vh] w-[100vw] items-center justify-center bg-black bg-opacity-70 transform duration-200 ${modalFormState.value ? "translate-x-[100vw]" : ""}`}
+      >
+        <button
+          class="absolute right-[5%] top-[10%] text-white"
+          onClick$={() => (modalFormState.value = !modalFormState.value)}
+        >
+          X
+        </button>
+        <div class="flex flex-col items-center justify-center gap-5 h-[80%] w-[80%] bg-transparent">
+          {forms.value.map((form, index) => {
+            return (
+              <button
+                key={index}
+                class="w-[200px] h-[50px] bg-transparent border-2 border-white rounded-xl text-white font-bold"
+                onClick$={() => {
+                  typeFormViewState.value = !typeFormViewState.value;
+                  typeFormViewId.value = form.dataTfLive;
+                }}
+              >
+                {form.name}
+              </button>
+            );
+          })}
+          <button class="w-[200px] h-[50px] text-white border-2  bg-blue-500 rounded-xl font-bold" onClick$={() => handleAddForm()}>
+            Agregar Formulario
+          </button>
         </div>
-      ) : (
-        ""
-      )}
+      </div>
+      {/* TypeForm View */}
+
+      <TypeFormView
+        typeFormViewState={typeFormViewState}
+        dataTfLive={typeFormViewId}
+      />
+
       {/*  */}
       <div ref={sideBarMenuRef}>
         <SideBarMenu id="drawer-navigation" modalFormState={modalFormState} />
@@ -74,7 +166,7 @@ export default component$<HeaderProps>(() => {
             <button
               type="button"
               class="hidden border-r-2 border-r-black p-2 dark:border-r-white md:block"
-              onClick$={() => handleForm()}
+              onClick$={() => (modalFormState.value = !modalFormState.value)}
             >
               Encuestas
             </button>
