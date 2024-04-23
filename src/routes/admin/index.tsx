@@ -1,4 +1,4 @@
-import { component$, useStore } from "@builder.io/qwik";
+import { component$, useResource$, } from "@builder.io/qwik";
 import { Link, routeLoader$ } from "@builder.io/qwik-city";
 import { News, NewsComponent } from "~/models/news.models";
 import { log } from "~/services/LogginService";
@@ -66,7 +66,7 @@ export default component$(() => {
       <div class="w-full">
         <table class="w-full">
           <thead>
-            <tr class="border border-black">
+            <tr class="border border-black bg-black text-white">
               <th class="border border-black">id</th>
               <th class="border border-black">Nombre</th>
               <th class="border border-black">fecha</th>
@@ -80,17 +80,17 @@ export default component$(() => {
                 <tr key={article.id} class="!z-20 border border-black">
                   <td class="border-x border-black">{article.id}</td>
                   <td class="border-x border-black">{article.title}</td>
-                  <td class="border-x border-black">{article.date}</td>
+                  <td class="border-x border-black">{article.last_modification?.toString() ?? ""}</td>
                   <td class="flex h-full w-full justify-center items-center   sm:flex-col">
                     <Link
                       href={`/admin/edit/${article.id}`}
-                      class="bg-purple-400 w-[60px] sm:w-full"
+                      class="bg-purple-400 w-[60px] text-center sm:w-full"
                       
                     >
                       editar
                     </Link>
                     <button
-                      class="bg-red-500 w-[60px] sm:w-full"
+                      class="bg-red-500 w-[60px] text-center sm:w-full"
                       onClick$={() => console.log("eliminar" + article.id)}
                     >
                       eliminar

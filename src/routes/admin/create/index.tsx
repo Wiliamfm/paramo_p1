@@ -6,7 +6,7 @@ import {
 } from "@builder.io/qwik";
 import { Form, routeAction$, zod$ } from "@builder.io/qwik-city";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import { NewsInputType, NewsType } from "~/models/news";
+import { NewsInputType, NewsType } from "~/models/news.models";
 import { newsInputSchema } from "~/schemas/news.schema";
 import { log } from "~/services/LogginService";
 import { supabase } from "~/utils/supabase";
