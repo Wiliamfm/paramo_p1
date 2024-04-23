@@ -1,15 +1,15 @@
 import { Signal, component$, useSignal } from '@builder.io/qwik';
 import { NavLink } from '../navLink/navLink';
-import { isBrowser } from '@builder.io/qwik/build';
+import { User } from '@supabase/supabase-js';
 
 export interface SideBarMenuProps {
   id: string,
-  modalFormState:Signal
+  modalFormState:Signal,
+  user: User | null
 }
 
 export const SideBarMenu = component$<SideBarMenuProps>((props) => {
   const isDark = useSignal(false);
-  const loginSignal = {value: false};
 
   return (
     <div id={props.id} class="fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800 dark:text-white" tabIndex={-1} aria-labelledby="drawer-navigation-label">
@@ -62,7 +62,7 @@ export const SideBarMenu = component$<SideBarMenuProps>((props) => {
             <NavLink href="/" activeClass="" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Buscar</NavLink>
           </li>
           <li>
-            <NavLink href={loginSignal.value ? "/logout" : "/login"} activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">{loginSignal.value ? "logout" : "login"}</NavLink>
+            <NavLink href={props.user ? "/logout" : "/login"} activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">{props.user ? "logout" : "login"}</NavLink>
           </li>
         </ul>
       </div>
