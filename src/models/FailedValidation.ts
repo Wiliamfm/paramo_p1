@@ -1,5 +1,5 @@
 export interface Fail {
   success: false;
-  error: {};
+  error: {} | null;
   status: number;
 }

@@ -1,18 +1,20 @@
 import { Resource, component$, useResource$, useStore } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
+import { Fail } from "~/models/FailedValidation";
 import { News, NewsComponent } from "~/models/news.models";
 import { log } from "~/services/LogginService";
 import { supabase } from "~/utils/supabase";
 
 export default component$(() => {
-  const news = useStore<News[]>([]);
+  const news = useStore<News[] | Fail>([]);
 
-  const newsResource = useResource$<News[] | any>(async ({track}) => {
+  const newsResource = useResource$<News[]>(async ({track}) => {
     track(() => news);
     const userResponse = await supabase.auth.getUser();
     if(userResponse.error){
       log(`Failed to get user [${userResponse.error.status}: code: ${userResponse.error.code}]: ${userResponse.error.message}`);
-      return {failed: true, status: userResponse.error.status ?? 401, error: userResponse.error};
+      return [];
+      //return {success: false, status: userResponse.error.status ?? 401, error: userResponse.error};
     }
     const newsResponse = await supabase
       .from("News")
@@ -20,7 +22,8 @@ export default component$(() => {
       .eq("author_id", userResponse.data.user.id)
     if(newsResponse.error || newsResponse.status != 200){
       log(`Failed to get news [${newsResponse.status}: code: ${newsResponse.error?.code}]: ${newsResponse.error?.message ?? newsResponse.statusText}`);
-      return {failed: true, status: newsResponse.status ?? 500, error: userResponse.error};
+      return [];
+      //return {success: false, status: newsResponse.status ?? 500, error: userResponse.error};
     }
 
     const data: News[] = []
@@ -35,7 +38,8 @@ export default component$(() => {
           .eq("id", newsComponent.component_id);
         if(componentResponse .error || componentResponse .status != 200){
           log(`Failed to get news components [${componentResponse.status}: code: ${componentResponse.error?.code}]: ${componentResponse.error?.message ?? componentResponse.statusText}`);
-          return {failed: true, status: newsResponse.status ?? 500, error: componentResponse.error};
+          return [];
+          //return {success: false, status: newsResponse.status ?? 500, error: componentResponse.error};
         }
         const component: NewsComponent = {
           type: newsComponent.component_type,
@@ -64,7 +68,7 @@ export default component$(() => {
           <p>PENDING</p>
         </>
         }}
-        onResolved={(news: News[]) => {
+        onResolved={(news) => {
           return <>
             <div class="w-full">
               <table class="w-full">
@@ -82,7 +86,7 @@ export default component$(() => {
                       <tr key={article.id} class="!z-20 border border-black">
                         <td class="border-x border-black">{article.id}</td>
                         <td class="border-x border-black">{article.title}</td>
-                        <td class="border-x border-black">{article.lastModification}</td>
+                        <td class="border-x border-black">{article.lastModification?.toString() ?? ""}</td>
                         <td class="flex h-full w-full justify-center items-center   sm:flex-col">
                           <Link
                             href={`/admin/edit/${article.id}`}
