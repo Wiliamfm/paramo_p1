@@ -45,31 +45,12 @@ export const useNews = routeLoader$(async requestEvent => {
   for(let d of data){
     console.log(d);;
   }
-  /*
-  const news = await supabase.from("News")
-    .select()
-    .eq("author_id", userResponse.data.user.id);
-  if(news.error || news.status != 200){
-    log(`Failed to get news [${news.status}: code: ${news.error?.code}]: ${news.error?.message ?? news.statusText}`);
-    return requestEvent.fail(news.status ?? 500, {...news.error});
-  }
-  for(let newsItem of news.data){
-    const newsComponents = await supabase.from("News_components")
-      .select()
-      .eq("news_id", newsItem.id)
-    if(newsComponents.error || newsComponents.status != 200){
-      log(`Failed to get news components [${newsComponents.status}: code: ${newsComponents.error?.code}]: ${newsComponents.error?.message ?? newsComponents.statusText}`);
-      return requestEvent.fail(newsComponents.status ?? 500, {...newsComponents.error});
-    }
-    for(let newsComponent of newsComponents.data){
-      console.log(newsComponent);
-    }
-  }
-  */
   return data;
 });
 
 export default component$(() => {
+  const newsLoader = useNews();
+  console.log(newsLoader.value);
   const states = useStore({
     articles: [
       {
