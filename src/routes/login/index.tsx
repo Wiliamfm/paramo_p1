@@ -1,4 +1,4 @@
-import { component$, useStore, useContext } from "@builder.io/qwik";
+import { component$, useStore, useContext, } from "@builder.io/qwik";
 import { Form, routeAction$, zod$ } from "@builder.io/qwik-city";
 import { LoginInput } from "~/models/login";
 import { loginRequestSchema } from "~/schemas/login.schema";
@@ -6,9 +6,10 @@ import { log } from "~/services/LogginService";
 import { Fail } from "~/models/FailedValidation";
 import { createAdminUser, supabase } from "~/utils/supabase";
 import { token } from "~/root";
+import { LoginForm } from "~/components/common/loginForm/loginForm";
 
 
-export const useLogin = routeAction$(async (data, requestEvent) => {
+export const useLogin =routeAction$(async (data, requestEvent) => {
   const response = await supabase.auth.signInWithPassword({
     email: data.email,
     password: data.password
@@ -34,44 +35,18 @@ export default component$(() => {
   const states = useStore({
     data: { email: "", password: "" } as LoginInput,
   });
-  const loginAction = useLogin();
+  const loginAction = useLogin()
+  
 
 
 
   return (
-    <div class="flex items-start justify-center min-h-[70vh] w-full p-3 dark:text-white">
-      <Form action={loginAction} class="flex w-[90%] mt-10 flex-col border-2 border-black p-5 gap-3 dark:border-white">
-      <h1 class="block text-center font-bold text-3xl">Login</h1>
-        <label for="email">Email:</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="Email"
-          class="border border-gray-500 pl-1"
-          onInput$={(event) =>
-            (states.data.email = (event.target as HTMLInputElement).value)
-          }
-        />
-        <label for="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          class="border border-gray-500 pl-1"
-          onInput$={(event) =>
-            (states.data.password = (event.target as HTMLInputElement).value)
-          }
-        />
-        <button type="submit" class="bg-green-500">
-          Log in
-        </button>
-        <button onClick$={() => {
-          const user = createAdminUser();
-          console.log(user);
-        }}type="button" class="bg-red-500">create admin user</button>
-      </Form>
+    <div class="flex flex-col items-start justify-center min-h-[70vh] w-full p-3 dark:text-white">
+      
+      <div class="w-full flex items-center justify-center py-5 ">
+      <LoginForm states={states} loginAction={loginAction}/>
+
+      </div>
     </div>
   );
 });

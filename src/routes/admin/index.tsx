@@ -45,66 +45,14 @@ export const useNews = routeLoader$(async requestEvent => {
   for(let d of data){
     console.log(d);;
   }
+  
   return data;
 });
 
 export default component$(() => {
   const newsLoader = useNews();
   console.log(newsLoader.value);
-  const states = useStore({
-    articles: [
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-      {
-        id: 1236545412,
-        name: "estadio maracana fdf dgdg dgd aasd fefe fsdf asdf ",
-        date: "03 .02 .21",
-      },
-    ],
-  });
+  
 
   return (
     <div class=" min-h-[70vh] w-full p-3 ">
@@ -126,11 +74,12 @@ export default component$(() => {
             </tr>
           </thead>
           <tbody>
-            {states.articles.map((article) => {
+            {!newsLoader.value?.failed && newsLoader.value && newsLoader.value.map((article) => {
+
               return (
                 <tr key={article.id} class="!z-20 border border-black">
                   <td class="border-x border-black">{article.id}</td>
-                  <td class="border-x border-black">{article.name}</td>
+                  <td class="border-x border-black">{article.title}</td>
                   <td class="border-x border-black">{article.date}</td>
                   <td class="flex h-full w-full justify-center items-center   sm:flex-col">
                     <Link
