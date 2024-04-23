@@ -47,7 +47,7 @@ export default component$(() => {
 
   if (show.id != "null") {
     return (
-      <div class="flex min-h-screen w-full flex-col items-center gap-5  p-3">
+      <div class="flex min-h-screen w-full flex-col items-center gap-5  p-3 dark:text-white">
         {/* title */}
         <TitleComponent value={show.name}/>
         {/* Banner or Image */}

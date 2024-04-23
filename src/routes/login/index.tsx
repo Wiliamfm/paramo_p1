@@ -39,8 +39,8 @@ export default component$(() => {
 
 
   return (
-    <div class="flex items-start justify-center min-h-[70vh] w-full p-3 ">
-      <Form action={loginAction} class="flex w-[90%] mt-10 flex-col border-2 border-black p-5 gap-3">
+    <div class="flex items-start justify-center min-h-[70vh] w-full p-3 dark:text-white">
+      <Form action={loginAction} class="flex w-[90%] mt-10 flex-col border-2 border-black p-5 gap-3 dark:border-white">
       <h1 class="block text-center font-bold text-3xl">Login</h1>
         <label for="email">Email:</label>
         <input
