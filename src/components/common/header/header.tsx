@@ -3,14 +3,21 @@ import {
   Signal,
   component$,
   useSignal,
-  useStore,
-  useTask$,
 } from "@builder.io/qwik";
 import { NavLink } from "../navLink/navLink";
 import ImgParamoLogo from "../../../../public/images/paramo_logo.png?jsx";
 import { SideBarMenu } from "../sideBarMenu/sideBarMenu";
+import { User } from "@supabase/supabase-js";
 
-interface HeaderProps {}
+interface HeaderProps {
+  user: User | null;
+}
+
+export interface formCreation {
+  name: string;
+  dataTfLive: string;
+  src: "//embed.typeform.com/next/embed.js";
+};
 
 const TypeFormView = component$(
   ({
@@ -74,22 +81,17 @@ const TypeFormView = component$(
       }
 
     }catch(err){
-      console.log("hola")
+      console.error(err);
     }
     
   }
 );
-type formCreation = {
-  name: string;
-  dataTfLive: "";
-  src: "//embed.typeform.com/next/embed.js";
-};
 
-export default component$<HeaderProps>(() => {
+export default component$<HeaderProps>(({user}) => {
   const isDark = useSignal(false);
   const sideBarMenuRef = useSignal<Element>();
   const modalFormState = useSignal(false);
-  const forms = useSignal([
+  const forms = useSignal<formCreation[]>([
     {
       name: "formulario 1",
       dataTfLive: "",
@@ -100,7 +102,7 @@ export default component$<HeaderProps>(() => {
   const typeFormViewId = useSignal("");
 
   const handleAddForm = $(async () => {
-    new Promise<{ name: string; id: string }>((resolve, reject) => {
+    new Promise<{ name: string; id: string }>((resolve) => {
       let name = window.prompt("el nombre del formulario") || "";
       let id = window.prompt("digite el id del form") || "";
       resolve({ name: name, id: id });
@@ -160,12 +162,14 @@ export default component$<HeaderProps>(() => {
               </button>
             );
           })}
-          <button
-            class="w-[200px] h-[50px] text-white border-2  bg-blue-500 rounded-xl font-bold"
-            onClick$={() => handleAddForm()}
-          >
-            Agregar Formulario
-          </button>
+          {
+            user &&<button
+              class="w-[200px] h-[50px] text-white border-2  bg-blue-500 rounded-xl font-bold"
+              onClick$={() => handleAddForm()}
+            >
+              Agregar Formulario
+            </button>
+          }
         </div>
       </div>
       {/* TypeForm View */}
@@ -177,7 +181,7 @@ export default component$<HeaderProps>(() => {
 
       {/*  */}
       <div ref={sideBarMenuRef}>
-        <SideBarMenu id="drawer-navigation" modalFormState={modalFormState} />
+        <SideBarMenu id="drawer-navigation" modalFormState={modalFormState} user={user} />
       </div>
       <div
         class="h-full w-full"

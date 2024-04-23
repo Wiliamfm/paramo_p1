@@ -4,10 +4,27 @@ import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 
 import Header from "../components/common/header/header";
 import Footer from "../components/common/footer/footer";
+import { supabase } from "~/utils/supabase";
 
 export const head: DocumentHead = {
   title: "Paramo Presenta",
 };
+
+export const useUserLoader = routeLoader$(async requestEvent => {
+  const session = await supabase.auth.getSession();
+  if(session.error || session.data.session == null){
+    requestEvent.status(401);
+    return requestEvent.fail(session.error?.status ?? 401, session);
+  }
+  const {data, error} = await supabase.auth.getUser();
+  console.log(data);
+  console.log(error);
+  if(error){
+    console.log(error);
+    return requestEvent.fail(error.status ?? 401, error);
+  }
+  return data.user;
+});
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {
   // Control caching for this request for best performance and to reduce hosting costs:
@@ -27,10 +44,13 @@ export const useServerTimeLoader = routeLoader$(() => {
 });
 
 export default component$(() => {
+  const currentUser = useUserLoader();
+
+  console.log(currentUser.value);
 
   return (
     <div class="flex flex-col dark:bg-black h-screen w-screen overflow-y-scroll overflow-x-hidden">
-      <Header />
+      <Header user={currentUser.value?.failed ? null : currentUser.value} />
       <main>
         <div class="">
           <Slot />
