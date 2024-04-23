@@ -23,6 +23,8 @@ export interface NewsComponent {
 }
 
 export interface News{
+  id?: number;
   title: string;
   components: NewsComponent[];
+  last_modification?: Date;
 }

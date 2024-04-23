@@ -1,6 +1,6 @@
 import { component$, useStore } from "@builder.io/qwik";
 import { Link, routeLoader$ } from "@builder.io/qwik-city";
-import { News, NewsComponent } from "~/models/news";
+import { News, NewsComponent } from "~/models/news.models";
 import { log } from "~/services/LogginService";
 import { supabase } from "~/utils/supabase";
 
