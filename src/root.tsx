@@ -24,7 +24,7 @@ export default component$(() => {
 
 // initialise the event listeners for the data attributes on render
 // eslint-disable-next-line qwik/no-use-visible-task
-  const TOKEN = useSignal(""); 
+  const TOKEN = useSignal("token signal"); 
 
   useVisibleTask$(() => {
     initFlowbite();

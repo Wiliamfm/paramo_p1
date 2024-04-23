@@ -18,7 +18,6 @@ export const useCreate = routeAction$(async (data, requestEvent) => {
     return requestEvent.fail(400, {success: false, error: "title is required"});
   }
 
-  console.log(data);
   let title: string | undefined;
   try{
     title = data.components.splice(titleIndex, 1)[0].title;

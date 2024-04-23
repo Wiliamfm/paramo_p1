@@ -1,58 +1,53 @@
-import { component$, useResource$, } from "@builder.io/qwik";
-import { Link, routeLoader$ } from "@builder.io/qwik-city";
+import { Resource, component$, useResource$, useStore } from "@builder.io/qwik";
+import { Link } from "@builder.io/qwik-city";
 import { News, NewsComponent } from "~/models/news.models";
 import { log } from "~/services/LogginService";
 import { supabase } from "~/utils/supabase";
 
-export const useNews = routeLoader$(async requestEvent => {
-  const userResponse = await supabase.auth.getUser();
-  if(userResponse.error){
-    log(`Failed to get user [${userResponse.error.status}: code: ${userResponse.error.code}]: ${userResponse.error.message}`);
-    return requestEvent.fail(userResponse.error.status ?? 401, userResponse.error);
-  }
-  const newsResponse = await supabase
-    .from("News")
-    .select("*, News_components(*)")
-    .eq("author_id", userResponse.data.user.id)
-  if(newsResponse.error || newsResponse.status != 200){
-    log(`Failed to get news [${newsResponse.status}: code: ${newsResponse.error?.code}]: ${newsResponse.error?.message ?? newsResponse.statusText}`);
-    return requestEvent.fail(newsResponse.status ?? 500, {...newsResponse.error});
-  }
-
-  const data: News[] = []
-  for(let newsItem of newsResponse.data){
-    const news: News = {title: newsItem.title, components: []};
-    for(let newsComponent of newsItem.News_components){
-      newsComponent.component_type = newsComponent.component_type.charAt(0).toUpperCase() + newsComponent.component_type.slice(1);
-      const componentsTable = `${newsComponent.component_type}s`;
-      const componentResponse = await supabase
-        .from(componentsTable)
-        .select()
-        .eq("id", newsComponent.component_id);
-      if(componentResponse .error || componentResponse .status != 200){
-        log(`Failed to get news components [${componentResponse.status}: code: ${componentResponse.error?.code}]: ${componentResponse.error?.message ?? componentResponse.statusText}`);
-        return requestEvent.fail(newsResponse.status ?? 500, {...componentResponse.error});
-      }
-      const component: NewsComponent = {
-        type: newsComponent.component_type,
-        value: componentResponse.data[0].value,
-        order: newsComponent.order,
-      }
-      news.components.push(component);
-    }
-    data.push(news);
-  }
-  for(let d of data){
-    console.log(d);;
-  }
-  
-  return data;
-});
-
 export default component$(() => {
-  const newsLoader = useNews();
-  console.log(newsLoader.value);
-  
+  const news = useStore<News[]>([]);
+
+  const newsResource = useResource$<News[] | any>(async ({track}) => {
+    track(() => news);
+    const userResponse = await supabase.auth.getUser();
+    if(userResponse.error){
+      log(`Failed to get user [${userResponse.error.status}: code: ${userResponse.error.code}]: ${userResponse.error.message}`);
+      return {failed: true, status: userResponse.error.status ?? 401, error: userResponse.error};
+    }
+    const newsResponse = await supabase
+      .from("News")
+      .select("*, News_components(*)")
+      .eq("author_id", userResponse.data.user.id)
+    if(newsResponse.error || newsResponse.status != 200){
+      log(`Failed to get news [${newsResponse.status}: code: ${newsResponse.error?.code}]: ${newsResponse.error?.message ?? newsResponse.statusText}`);
+      return {failed: true, status: newsResponse.status ?? 500, error: userResponse.error};
+    }
+
+    const data: News[] = []
+    for(let newsItem of newsResponse.data){
+      const news: News = {id: newsItem.id, title: newsItem.title, components: [], lastModification: newsItem.last_modification};
+      for(let newsComponent of newsItem.News_components){
+        newsComponent.component_type = newsComponent.component_type.charAt(0).toUpperCase() + newsComponent.component_type.slice(1);
+        const componentsTable = `${newsComponent.component_type}s`;
+        const componentResponse = await supabase
+          .from(componentsTable)
+          .select()
+          .eq("id", newsComponent.component_id);
+        if(componentResponse .error || componentResponse .status != 200){
+          log(`Failed to get news components [${componentResponse.status}: code: ${componentResponse.error?.code}]: ${componentResponse.error?.message ?? componentResponse.statusText}`);
+          return {failed: true, status: newsResponse.status ?? 500, error: componentResponse.error};
+        }
+        const component: NewsComponent = {
+          type: newsComponent.component_type,
+          value: componentResponse.data[0].value,
+          order: newsComponent.order,
+        }
+        news.components.push(component);
+      }
+      data.push(news);
+    }
+    return data;
+  })
 
   return (
     <div class=" min-h-[70vh] w-full p-3 ">
@@ -62,46 +57,57 @@ export default component$(() => {
           Crear Nuevo Articulo
         </Link>
       </div>
+      <Resource
+        value={newsResource}
+        onPending={() => {
+        return <>
+          <p>PENDING</p>
+        </>
+        }}
+        onResolved={(news: News[]) => {
+          return <>
+            <div class="w-full">
+              <table class="w-full">
+                <thead>
+                  <tr class="border border-black  bg-black text-white">
+                    <th class="border border-black">id</th>
+                    <th class="border border-black">Nombre</th>
+                    <th class="border border-black">fecha</th>
+                    <th class="border border-black">acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {news.map((article) => {
+                    return (
+                      <tr key={article.id} class="!z-20 border border-black">
+                        <td class="border-x border-black">{article.id}</td>
+                        <td class="border-x border-black">{article.title}</td>
+                        <td class="border-x border-black">{article.lastModification?.toString() ?? ""}</td>
+                        <td class="flex h-full w-full justify-center items-center   sm:flex-col">
+                          <Link
+                            href={`/admin/edit/${article.id}`}
+                            class="bg-purple-400 w-[60px] text-center sm:w-full"
+                            
+                          >
+                            editar
+                          </Link>
+                          <button
+                            class="bg-red-500 w-[60px] text-center sm:w-full"
+                            onClick$={() => console.log("eliminar" + article.id)}
+                          >
+                            eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
+        }}
+      />
 
-      <div class="w-full">
-        <table class="w-full">
-          <thead>
-            <tr class="border border-black bg-black text-white">
-              <th class="border border-black">id</th>
-              <th class="border border-black">Nombre</th>
-              <th class="border border-black">fecha</th>
-              <th class="border border-black">acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!newsLoader.value?.failed && newsLoader.value && newsLoader.value.map((article) => {
-
-              return (
-                <tr key={article.id} class="!z-20 border border-black">
-                  <td class="border-x border-black">{article.id}</td>
-                  <td class="border-x border-black">{article.title}</td>
-                  <td class="border-x border-black">{article.last_modification?.toString() ?? ""}</td>
-                  <td class="flex h-full w-full justify-center items-center   sm:flex-col">
-                    <Link
-                      href={`/admin/edit/${article.id}`}
-                      class="bg-purple-400 w-[60px] text-center sm:w-full"
-                      
-                    >
-                      editar
-                    </Link>
-                    <button
-                      class="bg-red-500 w-[60px] text-center sm:w-full"
-                      onClick$={() => console.log("eliminar" + article.id)}
-                    >
-                      eliminar
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
     </div>
   );
 });
