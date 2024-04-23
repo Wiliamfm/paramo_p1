@@ -8,7 +8,12 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 export const createAdminUser = $(async () => {
   const {data, error} = await supabase.auth.signUp({
     email: "admin@test.com",
-    password: "1q2w3E*"
+    password: "1q2w3E*",
+    options: {
+      data: {
+        role: "super_admin"
+      }
+    }
   })
   if(error) {
     console.log("Unable to create admin user:\n", error);
