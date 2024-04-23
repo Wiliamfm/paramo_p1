@@ -22,7 +22,7 @@ export const Card = component$(
       // revisar Link
       <a
         href={`/news/${id}`}
-        class="flex h-[230px] w-full items-center justify-center transition-all duration-[0.5s] ease-in-out hover:bg-black hover:text-white md:h-[260px] "
+        class="flex h-[230px] border border-transparent w-full items-center justify-center transition-all duration-[0.5s] ease-in-out hover:bg-black hover:text-white md:h-[260px] dark:hover:bg-gray-900"
         onMouseEnter$={async () => {
           await handleHover(true);
         }}
@@ -36,7 +36,7 @@ export const Card = component$(
               <span class="text-gray-500">02.03.24</span>
             </div>
 
-            <div class="w-[85%] pl-3 sm:pl-0 ">
+            <div class="flex flex-col items-start gap-1 w-[85%] pl-3 sm:pl-0 lg:!gap-10 xl:!gap-10 2xl:!gap-10  ">
               <h2 class="text font-bold">{title}</h2>
               <button class="h-7 w-7 rounded-md bg-red-500 text-white">
                 ir
@@ -52,6 +52,7 @@ export const Card = component$(
                 src={Ima}
                 width="120"
                 height="140"
+                class="w-full"
                 style={{
                   transform: isOn.value ? "scale(1.25)" : "scale(1)",
                   transition: "transform 0.5s ease-in-out",
