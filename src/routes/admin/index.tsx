@@ -1,5 +1,73 @@
 import { component$, useStore } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { Link, routeLoader$ } from "@builder.io/qwik-city";
+import { News, NewsComponent } from "~/models/news";
+import { log } from "~/services/LogginService";
+import { supabase } from "~/utils/supabase";
+
+export const useNews = routeLoader$(async requestEvent => {
+  const userResponse = await supabase.auth.getUser();
+  if(userResponse.error){
+    log(`Failed to get user [${userResponse.error.status}: code: ${userResponse.error.code}]: ${userResponse.error.message}`);
+    return requestEvent.fail(userResponse.error.status ?? 401, userResponse.error);
+  }
+  const newsResponse = await supabase
+    .from("News")
+    .select("*, News_components(*)")
+    .eq("author_id", userResponse.data.user.id)
+  if(newsResponse.error || newsResponse.status != 200){
+    log(`Failed to get news [${newsResponse.status}: code: ${newsResponse.error?.code}]: ${newsResponse.error?.message ?? newsResponse.statusText}`);
+    return requestEvent.fail(newsResponse.status ?? 500, {...newsResponse.error});
+  }
+
+  const data: News[] = []
+  for(let newsItem of newsResponse.data){
+    const news: News = {title: newsItem.title, components: []};
+    for(let newsComponent of newsItem.News_components){
+      newsComponent.component_type = newsComponent.component_type.charAt(0).toUpperCase() + newsComponent.component_type.slice(1);
+      const componentsTable = `${newsComponent.component_type}s`;
+      const componentResponse = await supabase
+        .from(componentsTable)
+        .select()
+        .eq("id", newsComponent.component_id);
+      if(componentResponse .error || componentResponse .status != 200){
+        log(`Failed to get news components [${componentResponse.status}: code: ${componentResponse.error?.code}]: ${componentResponse.error?.message ?? componentResponse.statusText}`);
+        return requestEvent.fail(newsResponse.status ?? 500, {...componentResponse.error});
+      }
+      const component: NewsComponent = {
+        type: newsComponent.component_type,
+        value: componentResponse.data[0].value,
+        order: newsComponent.order,
+      }
+      news.components.push(component);
+    }
+    data.push(news);
+  }
+  for(let d of data){
+    console.log(d);;
+  }
+  /*
+  const news = await supabase.from("News")
+    .select()
+    .eq("author_id", userResponse.data.user.id);
+  if(news.error || news.status != 200){
+    log(`Failed to get news [${news.status}: code: ${news.error?.code}]: ${news.error?.message ?? news.statusText}`);
+    return requestEvent.fail(news.status ?? 500, {...news.error});
+  }
+  for(let newsItem of news.data){
+    const newsComponents = await supabase.from("News_components")
+      .select()
+      .eq("news_id", newsItem.id)
+    if(newsComponents.error || newsComponents.status != 200){
+      log(`Failed to get news components [${newsComponents.status}: code: ${newsComponents.error?.code}]: ${newsComponents.error?.message ?? newsComponents.statusText}`);
+      return requestEvent.fail(newsComponents.status ?? 500, {...newsComponents.error});
+    }
+    for(let newsComponent of newsComponents.data){
+      console.log(newsComponent);
+    }
+  }
+  */
+  return data;
+});
 
 export default component$(() => {
   const states = useStore({
