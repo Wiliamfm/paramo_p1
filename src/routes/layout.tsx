@@ -5,6 +5,7 @@ import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 import Header from "../components/common/header/header";
 import Footer from "../components/common/footer/footer";
 import { supabase } from "~/utils/supabase";
+import { log } from "~/services/LogginService";
 
 export const head: DocumentHead = {
   title: "Paramo Presenta",
@@ -17,10 +18,8 @@ export const useUserLoader = routeLoader$(async requestEvent => {
     return requestEvent.fail(session.error?.status ?? 401, session);
   }
   const {data, error} = await supabase.auth.getUser();
-  console.log(data);
-  console.log(error);
   if(error){
-    console.log(error);
+    log(`Failed to get user [${error.status}: code: ${error.code}]: ${error.message}`);
     return requestEvent.fail(error.status ?? 401, error);
   }
   return data.user;
@@ -45,8 +44,6 @@ export const useServerTimeLoader = routeLoader$(() => {
 
 export default component$(() => {
   const currentUser = useUserLoader();
-
-  console.log(currentUser.value);
 
   return (
     <div class="flex flex-col dark:bg-black h-screen w-screen overflow-y-scroll overflow-x-hidden">
