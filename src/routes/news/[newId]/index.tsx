@@ -51,7 +51,7 @@ export default component$(() => {
         {/* title */}
         <TitleComponent value={show.name}/>
         {/* Banner or Image */}
-        <BannerComponent value=""/>
+        <BannerComponent />
         {/* Description */}
         <DescriptionComponent value={show.description}/>  
         {/* carousel1 */}
@@ -61,7 +61,7 @@ export default component$(() => {
         {/* Description */}
         <DescriptionComponent value={"segun estudios sisas, "+show.description}/>  
         {/* Video */}
-        <VideoComponent value=""/>
+        <VideoComponent />
           {/* share section */}
           <div class="flex w-full items-center justify-center">
             <div class="flex justify-between items-center w-[70%] border-t-2 border-black">

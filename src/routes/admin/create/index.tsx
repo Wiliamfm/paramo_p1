@@ -130,8 +130,7 @@ zod$(newsInputSchema),
 
 const ModularComponent = component$(({ component, ...props }: { component: co, index: number }) => {
   const isOpen = useSignal(true);
-  const handleModuleComponent = $(() => {
-  console.log(props.index);
+  const handleModuleComponent = (() => {
     if (component.type == "title") {
       return (
         <div class="flex flex-col">

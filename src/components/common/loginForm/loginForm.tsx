@@ -1,7 +1,7 @@
-import { $, QRL, component$, useStore } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 
-import { Action, Form, routeAction$, zod$ } from "@builder.io/qwik-city";
-import { createAdminUser, supabase } from "~/utils/supabase";
+import { Form } from "@builder.io/qwik-city";
+import { createAdminUser } from "~/utils/supabase";
 
 
 

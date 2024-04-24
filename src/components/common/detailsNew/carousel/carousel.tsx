@@ -12,6 +12,8 @@ export default component$(() => {
     imageSelector: 0,
     transitioning: false,
   });
+    /*
+     * Unused??
     const handleButtonsCarousel = $((direction:string)=>{
         if(direction=="left"){
             if(state.imageSelector===0){
@@ -21,6 +23,7 @@ export default component$(() => {
             state.imageSelector--
 
           }});
+    */
           
 
   const updateImageSelector = $((direction:any) => {

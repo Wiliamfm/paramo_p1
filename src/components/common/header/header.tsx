@@ -18,7 +18,7 @@ export interface formCreation {
   name: string;
   dataTfLive: string;
   src: "//embed.typeform.com/next/embed.js";
-};
+}
 
 const TypeFormView = component$(
   ({
@@ -120,7 +120,7 @@ export default component$<HeaderProps>(({user}) => {
           return window.alert("no se pudo crear, algun campo vacio");
         }
 
-        var response = await getForm(val.id);
+        const response = await getForm(val.id);
 
         if(!response){
           return window.alert("no se encontro el form")

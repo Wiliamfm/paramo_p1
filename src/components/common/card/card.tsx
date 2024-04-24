@@ -1,5 +1,4 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
 import Ima from "../../../../public/images/prueba1.jpg";
 
 export const Card = component$(
