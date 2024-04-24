@@ -4,6 +4,7 @@ dist
 /lib
 /lib-types
 /server
+server
 bun.lockb
 package-lock.json
 
