@@ -11,16 +11,15 @@ export const head: DocumentHead = {
   title: "Paramo Presenta",
 };
 
-export const useUserLoader = routeLoader$(async requestEvent => {
+export const useUserLoader = routeLoader$(async () => {
   const session = await supabase.auth.getSession();
   if(session.error || session.data.session == null){
-    requestEvent.status(401);
-    return requestEvent.fail(session.error?.status ?? 401, session);
+    return null;
   }
   const {data, error} = await supabase.auth.getUser();
-  if(error){
-    log(`Failed to get user [${error.status}: code: ${error.code}]: ${error.message}`);
-    return requestEvent.fail(error.status ?? 401, error);
+  if(error || data.user == null){
+    log(`Failed to get user [${error?.status}: code: ${error?.code}]: ${error?.message}`);
+    return null;
   }
   return data.user;
 });
