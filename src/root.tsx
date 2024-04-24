@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$, Signal, createContextId, useContextProvider,useSignal} from "@builder.io/qwik";
+import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import {
   QwikCityProvider,
   RouterOutlet,
@@ -6,13 +6,7 @@ import {
 } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
 import { initFlowbite } from "flowbite";
-
 import "./global.css";
-
-
-export const token = createContextId<Signal<string>>(
-  'token-user'
-);
 
 export default component$(() => {
   /**
@@ -24,13 +18,10 @@ export default component$(() => {
 
 // initialise the event listeners for the data attributes on render
 // eslint-disable-next-line qwik/no-use-visible-task
-  const TOKEN = useSignal("token signal"); 
-
   useVisibleTask$(() => {
     initFlowbite();
   });
   
-  useContextProvider(token, TOKEN);
   return (
     <QwikCityProvider>
       <head>

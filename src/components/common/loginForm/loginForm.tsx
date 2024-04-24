@@ -45,7 +45,7 @@ export const LoginForm = component$(({states, loginAction}:{states:any, loginAct
           <button
             onClick$={() => {
               const user = createAdminUser();
-              console.log(user);
+              console.log("\nAdmin user created: \n", user);
             }}
             type="button"
             class="bg-red-500"

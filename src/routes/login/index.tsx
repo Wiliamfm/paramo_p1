@@ -1,11 +1,10 @@
-import { component$, useStore, useContext, } from "@builder.io/qwik";
-import { Form, routeAction$, zod$ } from "@builder.io/qwik-city";
+import { component$, useStore, } from "@builder.io/qwik";
+import { routeAction$, zod$ } from "@builder.io/qwik-city";
 import { LoginInput } from "~/models/login";
 import { loginRequestSchema } from "~/schemas/login.schema";
 import { log } from "~/services/LogginService";
 import { Fail } from "~/models/FailedValidation";
-import { createAdminUser, supabase } from "~/utils/supabase";
-import { token } from "~/root";
+import { supabase } from "~/utils/supabase";
 import { LoginForm } from "~/components/common/loginForm/loginForm";
 
 
@@ -24,14 +23,11 @@ export const useLogin =routeAction$(async (data, requestEvent) => {
   }
   log(`User ${response.data.user.email} logged in: [TOKEN]: ${response.data.session?.access_token}`);
 
-  throw requestEvent.redirect(302, "/admin");
+  throw requestEvent.redirect(307, "/admin");
 },
 zod$(loginRequestSchema));
 
 export default component$(() => {
-  const tok = useContext(token) 
-  
-  console.log(tok.value)
   const states = useStore({
     data: { email: "", password: "" } as LoginInput,
   });
