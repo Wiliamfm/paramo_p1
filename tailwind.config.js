@@ -18,12 +18,9 @@ export default {
       "2xl": { min: "1536px" },
       // => @media (min-width: 1536px) { ... }
     },
-    extend: {
-      
-      
-    },
+    extend: {},
 
-    plugins: [],
-    darkMode: "class",
   },
+  plugins: [],
+  darkMode: "class",
 };

@@ -16,20 +16,42 @@ export default component$(() => {
    * Don't remove the `<head>` and `<body>` elements.
    */
 
-// initialise the event listeners for the data attributes on render
-// eslint-disable-next-line qwik/no-use-visible-task
+  // initialise the event listeners for the data attributes on render
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     initFlowbite();
   });
-  
+
   return (
     <QwikCityProvider>
       <head>
         <meta charSet="utf-8" />
-        <meta http-equiv="Permissions-Policy" content="interest-cohort=()"/>
+        <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
         <link rel="manifest" href="/manifest.json" />
         <RouterHead />
         <ServiceWorkerRegister />
+        <script
+          dangerouslySetInnerHTML={`
+        (function() {
+          function setTheme(theme) {
+            document.documentElement.className = theme;
+            localStorage.setItem('theme', theme);
+          }
+          var theme = localStorage.getItem('theme');
+          console.log(theme);
+          if (theme) {
+            setTheme(theme);
+          } else {
+            setTheme('light');
+          }
+        })();
+        window.addEventListener('load', function() {
+          var themeSwitch = document.getElementById('hide-checkbox');
+          themeSwitch.checked = localStorage.getItem('theme') === 'light'? true: false;
+        }
+        );
+      `}
+        ></script>
       </head>
       <body lang="en">
         <RouterOutlet />

@@ -1,9 +1,4 @@
-import {
-  $,
-  Signal,
-  component$,
-  useSignal,
-} from "@builder.io/qwik";
+import { $, Signal, component$, useSignal } from "@builder.io/qwik";
 import { NavLink } from "../navLink/navLink";
 import ImgParamoLogo from "../../../../public/images/paramo_logo.png?jsx";
 import { SideBarMenu } from "../sideBarMenu/sideBarMenu";
@@ -28,7 +23,7 @@ const TypeFormView = component$(
     typeFormViewState: Signal;
     dataTfLive: string;
   }) => {
-    try{
+    try {
       if (dataTfLive) {
         return (
           <div
@@ -80,20 +75,18 @@ const TypeFormView = component$(
           </div>
         );
       }
-
-    }catch(err){
+    } catch (err) {
       console.error(err);
     }
-    
   }
 );
 
-export const getForm= server$(async function(formId: string) {
-  const response = await fetch(`https://api.typeform.com/forms/${formId}`)
+export const getForm = server$(async function (formId: string) {
+  const response = await fetch(`https://api.typeform.com/forms/${formId}`);
   return response.ok;
 });
 
-export default component$<HeaderProps>(({user}) => {
+export default component$<HeaderProps>(({ user }) => {
   const isDark = useSignal(false);
   const sideBarMenuRef = useSignal<Element>();
   const modalFormState = useSignal(false);
@@ -113,28 +106,25 @@ export default component$<HeaderProps>(({user}) => {
       let id = window.prompt("digite el id del form") || "";
       resolve({ name: name, id: id });
     })
-      .then(async(val) => {
-        
-
+      .then(async (val) => {
         if (val?.name == "" || val?.id == "") {
           return window.alert("no se pudo crear, algun campo vacio");
         }
 
         const response = await getForm(val.id);
 
-        if(!response){
-          return window.alert("no se encontro el form")
+        if (!response) {
+          return window.alert("no se encontro el form");
         }
 
-          forms.value = [
-            ...forms.value,
-            {
-              dataTfLive: val.id,
-              name: val.name,
-              src: "//embed.typeform.com/next/embed.js",
-            },
-          ];
-        
+        forms.value = [
+          ...forms.value,
+          {
+            dataTfLive: val.id,
+            name: val.name,
+            src: "//embed.typeform.com/next/embed.js",
+          },
+        ];
       })
       .catch((err) => console.log(err));
   });
@@ -167,14 +157,14 @@ export default component$<HeaderProps>(({user}) => {
               </button>
             );
           })}
-          {
-            user &&<button
+          {user && (
+            <button
               class="w-[200px] h-[50px] text-white border-2  bg-blue-500 rounded-xl font-bold"
               onClick$={() => handleAddForm()}
             >
               Agregar Formulario
             </button>
-          }
+          )}
         </div>
       </div>
       {/* TypeForm View */}
@@ -186,7 +176,11 @@ export default component$<HeaderProps>(({user}) => {
 
       {/*  */}
       <div ref={sideBarMenuRef}>
-        <SideBarMenu id="drawer-navigation" modalFormState={modalFormState} user={user} />
+        <SideBarMenu
+          id="drawer-navigation"
+          modalFormState={modalFormState}
+          user={user}
+        />
       </div>
       <div
         class="h-full w-full"
@@ -234,11 +228,17 @@ export default component$<HeaderProps>(({user}) => {
             <div class="hidden p-2 md:block">
               <button
                 onClick$={() => {
-                  isDark.value = !isDark.value;
-                  if (isDark.value) {
-                    document.documentElement.classList.add("dark");
+                  const theme = document.documentElement.className;
+                  
+                  if (theme === "light") {
+                    isDark.value = false
+                    document.documentElement.className = "dark";
+                    localStorage.setItem("theme", "dark");
                   } else {
-                    document.documentElement.classList.remove("dark");
+                    document.documentElement.className = "light";
+                    localStorage.setItem("theme", "light");
+                    isDark.value = true
+
                   }
                 }}
               >
