@@ -1,4 +1,4 @@
-import { $, Signal, component$, useSignal, useOnDocument, useOnWindow, useTask$, useVisibleTask$, useContextProvider, useContext } from "@builder.io/qwik";
+import { $, Signal, component$, useSignal, useContext } from "@builder.io/qwik";
 import { NavLink } from "../navLink/navLink";
 import ImgParamoLogoBlack from "../../../../public/images/paramo_logo.png?jsx";
 import ImgParamoLogoWhite from "../../../../public/images/paramo_logo_white.png?jsx";

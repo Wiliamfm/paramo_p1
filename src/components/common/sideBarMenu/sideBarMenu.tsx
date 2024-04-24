@@ -1,4 +1,4 @@
-import { Signal, component$, useSignal, useOnDocument, $, useContext } from '@builder.io/qwik';
+import { Signal, component$, useContext } from '@builder.io/qwik';
 import { NavLink } from '../navLink/navLink';
 import { User } from '@supabase/supabase-js';
 import { ThemeContext } from '~/root';
