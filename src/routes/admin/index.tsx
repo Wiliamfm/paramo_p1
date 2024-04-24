@@ -1,29 +1,23 @@
-import { Resource, component$, useResource$, useStore } from "@builder.io/qwik";
+import { Resource, component$, useResource$, useSignal } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
-import { Fail } from "~/models/FailedValidation";
 import { News, NewsComponent } from "~/models/news.models";
 import { log } from "~/services/LogginService";
 import { supabase } from "~/utils/supabase";
+import { useUserLoader } from "../layout";
 
 export default component$(() => {
-  const news = useStore<News[] | Fail>([]);
+  const newsSignal = useSignal<News[]>();
+  const user = useUserLoader();
 
   const newsResource = useResource$<News[]>(async ({track}) => {
-    track(() => news);
-    const userResponse = await supabase.auth.getUser();
-    if(userResponse.error){
-      log(`Failed to get user [${userResponse.error.status}: code: ${userResponse.error.code}]: ${userResponse.error.message}`);
-      return [];
-      //return {success: false, status: userResponse.error.status ?? 401, error: userResponse.error};
-    }
+    track(() => newsSignal.value);
     const newsResponse = await supabase
       .from("News")
       .select("*, News_components(*)")
-      .eq("author_id", userResponse.data.user.id)
+      .eq("author_id", user.value?.id ?? "-1")
     if(newsResponse.error || newsResponse.status != 200){
       log(`Failed to get news [${newsResponse.status}: code: ${newsResponse.error?.code}]: ${newsResponse.error?.message ?? newsResponse.statusText}`);
       return [];
-      //return {success: false, status: newsResponse.status ?? 500, error: userResponse.error};
     }
 
     const data: News[] = []
@@ -50,6 +44,7 @@ export default component$(() => {
       }
       data.push(news);
     }
+
     return data;
   })
 
@@ -65,12 +60,12 @@ export default component$(() => {
         value={newsResource}
         onPending={() => {
         return <>
-          <p>PENDING</p>
+          <h1>PENDING</h1>
         </>
         }}
         onResolved={(news) => {
           return <>
-            <div class="w-full">
+            <div class="w-full dark:text-white">
               <table class="w-full">
                 <thead>
                   <tr class="border border-black  bg-black text-white">
@@ -97,7 +92,19 @@ export default component$(() => {
                           </Link>
                           <button
                             class="bg-red-500 w-[60px] text-center sm:w-full"
-                            onClick$={() => console.log("eliminar" + article.id)}
+                            onClick$={async () => {
+                              const response= await supabase
+                                .from("News")
+                                .delete()
+                                .eq("id", article.id);
+                              if(response.status != 204){
+                                alert(`Failed to delete news id: ${article.id} created [${response.status}, hint ${response.error?.hint}]: ${response.error?.message ?? response.statusText}`);
+                                return;
+                              }
+                              alert(`News id: ${article.id} deleted`);
+                              newsSignal.value = [];
+                              return;
+                            }}
                           >
                             eliminar
                           </button>
