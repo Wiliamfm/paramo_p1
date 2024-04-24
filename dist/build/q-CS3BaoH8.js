@@ -1,1 +1,0 @@
-import{q as t,r as o,k as r,_ as e}from"./q-DPFv6FGW.js";const s=t("auth"),n=()=>{throw"Symbol removed by Qwik Optimizer, it can not be called from current platform"},_=o(r(()=>e(()=>import("./q-BYrCJehl.js"),[]),"s_tntnak2DhJ8"));export{s as authContext,_ as default,n as onRequest};
