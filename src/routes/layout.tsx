@@ -46,7 +46,7 @@ export default component$(() => {
 
   return (
     <div class="flex flex-col dark:bg-black h-screen w-screen overflow-y-scroll overflow-x-hidden">
-      <Header user={currentUser.value?.failed ? null : currentUser.value} />
+      <Header user={currentUser.value} />
       <main>
         <div class="">
           <Slot />
