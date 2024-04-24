@@ -2,12 +2,10 @@ import { $, Signal, component$, useSignal } from "@builder.io/qwik";
 import { NavLink } from "../navLink/navLink";
 import ImgParamoLogo from "../../../../public/images/paramo_logo.png?jsx";
 import { SideBarMenu } from "../sideBarMenu/sideBarMenu";
-import { User } from "@supabase/supabase-js";
 import { server$ } from "@builder.io/qwik-city";
+import { useUserLoader } from "~/routes/layout";
 
-interface HeaderProps {
-  user: User | null;
-}
+interface HeaderProps {}
 
 export interface formCreation {
   name: string;
@@ -86,10 +84,11 @@ export const getForm = server$(async function (formId: string) {
   return response.ok;
 });
 
-export default component$<HeaderProps>(({ user }) => {
+export default component$<HeaderProps>(() => {
   const isDark = useSignal(false);
   const sideBarMenuRef = useSignal<Element>();
   const modalFormState = useSignal(false);
+  const currentUser = useUserLoader();
   const forms = useSignal<formCreation[]>([
     {
       name: "formulario 1",
@@ -157,7 +156,7 @@ export default component$<HeaderProps>(({ user }) => {
               </button>
             );
           })}
-          {user && (
+          {currentUser.value && (
             <button
               class="w-[200px] h-[50px] text-white border-2  bg-blue-500 rounded-xl font-bold"
               onClick$={() => handleAddForm()}
@@ -179,7 +178,7 @@ export default component$<HeaderProps>(({ user }) => {
         <SideBarMenu
           id="drawer-navigation"
           modalFormState={modalFormState}
-          user={user}
+          user={currentUser.value}
         />
       </div>
       <div
@@ -221,7 +220,7 @@ export default component$<HeaderProps>(({ user }) => {
               class="hidden border-r-2 border-r-black p-2 dark:border-r-white md:block"
               onClick$={() => (modalFormState.value = !modalFormState.value)}
             >
-              Encuestas
+              Contáctanos
             </button>
 
             <script src="//embed.typeform.com/next/embed.js"></script>

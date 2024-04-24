@@ -23,7 +23,7 @@ export const useLogin =routeAction$(async (data, requestEvent) => {
   }
   log(`User ${response.data.user.email} logged in: [TOKEN]: ${response.data.session?.access_token}`);
 
-  throw requestEvent.redirect(307, "/admin");
+  throw requestEvent.redirect(302, "/admin");
 },
 zod$(loginRequestSchema));
 

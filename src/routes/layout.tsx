@@ -12,10 +12,6 @@ export const head: DocumentHead = {
 };
 
 export const useUserLoader = routeLoader$(async () => {
-  const session = await supabase.auth.getSession();
-  if(session.error || session.data.session == null){
-    return null;
-  }
   const {data, error} = await supabase.auth.getUser();
   if(error || data.user == null){
     log(`Failed to get user [${error?.status}: code: ${error?.code}]: ${error?.message}`);
@@ -42,11 +38,10 @@ export const useServerTimeLoader = routeLoader$(() => {
 });
 
 export default component$(() => {
-  const currentUser = useUserLoader();
 
   return (
     <div class="flex flex-col dark:bg-black h-screen w-screen overflow-y-scroll overflow-x-hidden">
-      <Header user={currentUser.value} />
+      <Header />
       <main>
         <div class="">
           <Slot />

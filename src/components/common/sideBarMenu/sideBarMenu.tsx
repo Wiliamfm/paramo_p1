@@ -68,7 +68,7 @@ export const SideBarMenu = component$<SideBarMenuProps>((props) => {
             </li>
           }
           <li>
-            <NavLink href={props.user ? "/logout" : "/login"} activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">{props.user ? "logout" : "login"}</NavLink>
+            <a href={props.user ? "/logout" : "/login"} class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">{props.user ? "logout" : "login"}</a>
           </li>
         </ul>
       </div>
