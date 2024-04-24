@@ -1,4 +1,4 @@
-import { component$, useVisibleTask$ } from "@builder.io/qwik";
+import { Signal, component$, createContextId, useContextProvider, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import {
   QwikCityProvider,
   RouterOutlet,
@@ -7,6 +7,11 @@ import {
 import { RouterHead } from "./components/router-head/router-head";
 import { initFlowbite } from "flowbite";
 import "./global.css";
+
+
+export const ThemeContext = createContextId<Signal<string>>(
+  'light'
+);
 
 export default component$(() => {
   /**
@@ -18,9 +23,12 @@ export default component$(() => {
 
   // initialise the event listeners for the data attributes on render
   // eslint-disable-next-line qwik/no-use-visible-task
+  const isDark = useSignal("light");
   useVisibleTask$(() => {
     initFlowbite();
   });
+  
+  useContextProvider(ThemeContext,isDark)
 
   return (
     <QwikCityProvider>

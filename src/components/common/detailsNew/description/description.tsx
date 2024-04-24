@@ -3,8 +3,8 @@ import { component$ } from "@builder.io/qwik";
 
 export const DescriptionComponent = component$(({value}:{value:string})=>{
     return(
-        <div class="flex w-[90%] items-center justify-center  ">
-          <h1 class="text-justify text-base">{value}</h1>
+        <div class="flex w-[90%] items-center justify-center my-20">
+          <h1 class="text-justify md:text-2xl">{value}</h1>
         </div>
     )
 });

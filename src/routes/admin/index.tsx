@@ -84,7 +84,7 @@ export default component$(() => {
         onResolved={(news) => {
           return (
             <>
-              <div class="w-full dark:text-white">
+              <div class="w-full border dark:bg-black  dark:border-white dark:text-white">
                 <table class="w-full">
                   <thead>
                     <tr class="border border-black  bg-black text-white">

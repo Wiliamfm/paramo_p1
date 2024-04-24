@@ -37,9 +37,9 @@ export default component$(() => {
 
 
   return (
-    <div class="flex flex-col items-start justify-center min-h-[70vh] w-full p-3 dark:text-white">
+    <div class="flex flex-col items-start justify-center w-full min-h-[70vh] py-5 dark:text-white">
       
-      <div class="w-full flex items-center justify-center py-5 ">
+      <div class="w-full flex items-center justify-center  ">
       <LoginForm states={states} loginAction={loginAction}/>
 
       </div>

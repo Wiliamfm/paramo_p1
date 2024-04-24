@@ -17,5 +17,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+@layer base {
+  @font-face {
+    font-family: 'karlita';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(/public/paramo_assets/fonts/Karla-Regular) format('ttf');
+  }
+}
+
 
 

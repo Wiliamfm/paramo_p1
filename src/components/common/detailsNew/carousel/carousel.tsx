@@ -3,11 +3,10 @@ import { $, component$, useStore } from "@builder.io/qwik";
 export default component$(() => {
   const state = useStore({
     images: [
-      "bg-black",
-      "bg-purple-500",
-      "bg-blue-500",
-      "bg-yellow-500",
-      "bg-orange-500",
+      "festival1.jpg",
+      "festival2.jpeg",
+      "festival3.jpeg",
+      "people.jpg",
     ],
     imageSelector: 0,
     transitioning: false,
@@ -47,16 +46,18 @@ export default component$(() => {
   });
 
   return (
-    <div class="relative w-full py-3">
-      <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+    <div class="relative w-[90%] py-3">
+      <div class="relative h-56 overflow-hidden rounded-lg md:h-[500px]">
         {state.images.map((image, index) => {
           return (
             <div
               key={index}
-              class={`absolute h-full w-full transition-all duration-700 ease-in-out ${
+              class={`absolute h-full w-full transition-all duration-700 ease-in-out overflow-hidden  ${
                 index === state.imageSelector ? "opacity-100" : "opacity-0"
-              } ${image}`}
-            ></div>
+              } ${image} `}
+            >
+              <img src={`/images/${image}`} alt="image" width={500} height={500} class="w-full h-auto"/>
+            </div>
           );
         })}
       </div>

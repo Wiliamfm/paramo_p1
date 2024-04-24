@@ -18,8 +18,27 @@ export default {
       "2xl": { min: "1536px" },
       // => @media (min-width: 1536px) { ... }
     },
-    extend: {},
+    extend: {
+      
+      keyframes: {
+        slideIn: {
+          "0%":{
+            opacity: 0,
+            transform: "translateY(100px)",
+            
 
+            
+          }, 
+          "100%": {
+            opacity: 1,
+            transform: "translateY(0)",
+          },
+        },
+      },
+      animation:{
+        slideIn:"slideIn 2s ease-in "
+      }
+    },
   },
   plugins: [],
   darkMode: "class",

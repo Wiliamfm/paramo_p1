@@ -1,8 +1,12 @@
-import { $, Signal, component$, useSignal } from "@builder.io/qwik";
+import { $, Signal, component$, useSignal, useOnDocument, useOnWindow, useTask$, useVisibleTask$, useContextProvider, useContext } from "@builder.io/qwik";
 import { NavLink } from "../navLink/navLink";
-import ImgParamoLogo from "../../../../public/images/paramo_logo.png?jsx";
+import ImgParamoLogoBlack from "../../../../public/images/paramo_logo.png?jsx";
+import ImgParamoLogoWhite from "../../../../public/images/paramo_logo_white.png?jsx";
+
+
 import { SideBarMenu } from "../sideBarMenu/sideBarMenu";
 import { server$ } from "@builder.io/qwik-city";
+import { ThemeContext } from "~/root";
 import { useUserLoader } from "~/routes/layout";
 
 interface HeaderProps {}
@@ -85,7 +89,7 @@ export const getForm = server$(async function (formId: string) {
 });
 
 export default component$<HeaderProps>(() => {
-  const isDark = useSignal(false);
+  const isDark = useContext(ThemeContext)
   const sideBarMenuRef = useSignal<Element>();
   const modalFormState = useSignal(false);
   const currentUser = useUserLoader();
@@ -127,6 +131,11 @@ export default component$<HeaderProps>(() => {
       })
       .catch((err) => console.log(err));
   });
+  // useOnWindow("storage",$(()=>{
+  //   isDark.value = document.documentElement.className
+  //   console.log(document.documentElement.className)
+  // }))
+  
 
   return (
     <div class="relative h-full w-full">
@@ -206,7 +215,7 @@ export default component$<HeaderProps>(() => {
                 MENU
               </button>
             </div>
-            <div class="hidden flex-auto p-2 text-center font-[karla] md:block md:border-r-2 md:border-r-black dark:md:border-r-white">
+            <div class="hidden flex-auto p-2 text-center font-[karlita] md:block md:border-r-2 md:border-r-black dark:md:border-r-white">
               PARAMO PRESENTA LOGO
             </div>
             <button
@@ -225,23 +234,24 @@ export default component$<HeaderProps>(() => {
 
             <script src="//embed.typeform.com/next/embed.js"></script>
             <div class="hidden p-2 md:block">
+              {/* theme button */}
               <button
                 onClick$={() => {
-                  const theme = document.documentElement.className;
                   
-                  if (theme === "light") {
-                    isDark.value = false
+                  
+                  if (isDark.value === "light") {
+                    isDark.value = "dark"
                     document.documentElement.className = "dark";
                     localStorage.setItem("theme", "dark");
                   } else {
                     document.documentElement.className = "light";
                     localStorage.setItem("theme", "light");
-                    isDark.value = true
+                    isDark.value = "light"
 
                   }
                 }}
               >
-                {isDark.value ? (
+                {isDark.value == "light" ? (
                   <span class="material-symbols-outlined">brightness_high</span>
                 ) : (
                   <span class="material-symbols-outlined">dark_mode</span>
@@ -250,7 +260,7 @@ export default component$<HeaderProps>(() => {
             </div>
           </div>
         </nav>
-        <ImgParamoLogo class="mx-auto w-1/3" alt="Paramo Logo" />
+        {isDark.value == "dark"?<ImgParamoLogoWhite class="mx-auto w-1/3" alt="Paramo Logo" />:<ImgParamoLogoBlack class="mx-auto w-1/3" alt="Paramo Logo" />}
         {/* menu navigato */}
         <div class="mx-auto flex w-5/6 justify-evenly border-y-2 border-y-black p-4 text-center text-gray-500 dark:border-y-white dark:text-gray-400 sm:overflow-x-scroll">
           <NavLink

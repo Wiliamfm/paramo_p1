@@ -1,6 +1,7 @@
-import { Signal, component$, useSignal } from '@builder.io/qwik';
+import { Signal, component$, useSignal, useOnDocument, $, useContext } from '@builder.io/qwik';
 import { NavLink } from '../navLink/navLink';
 import { User } from '@supabase/supabase-js';
+import { ThemeContext } from '~/root';
 
 export interface SideBarMenuProps {
   id: string,
@@ -9,8 +10,10 @@ export interface SideBarMenuProps {
 }
 
 export const SideBarMenu = component$<SideBarMenuProps>((props) => {
-  const isDark = useSignal(false);
+  const isDark = useContext(ThemeContext)
   console.log("SideBar user: \n", props.user);
+
+  
 
   return (
     <div id={props.id} class="fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800 dark:text-white" tabIndex={-1} aria-labelledby="drawer-navigation-label">
@@ -29,42 +32,47 @@ export const SideBarMenu = component$<SideBarMenuProps>((props) => {
             <button type="button" class="p-2 border-r-2 border-r-black dark:border-r-white" onClick$={()=>props.modalFormState.value=!props.modalFormState.value}>
               Encuestas
             </button>
-            <button class="p-2" onClick$={() => {
-              isDark.value = !isDark.value
-              if (isDark.value) {
-                document.documentElement.classList.add('dark');
-              } else {
-                document.documentElement.classList.remove('dark');
-              }
-            }}>
-              {isDark.value ?
-                <span class="material-symbols-outlined">
-                  brightness_high
-                </span> :
-                <span class="material-symbols-outlined">
-                  dark_mode
-                </span>
-              }
-            </button>
+            <button
+                onClick$={() => {
+                  
+                  
+                  if (isDark.value === "light") {
+                    isDark.value = "dark"
+                    document.documentElement.className = "dark";
+                    localStorage.setItem("theme", "dark");
+                  } else {
+                    document.documentElement.className = "light";
+                    localStorage.setItem("theme", "light");
+                    isDark.value = "light"
+
+                  }
+                }}
+              >
+                {isDark.value == "light" ? (
+                  <span class="material-symbols-outlined">brightness_high</span>
+                ) : (
+                  <span class="material-symbols-outlined">dark_mode</span>
+                )}
+              </button>
           </li>
           <li>
-            <NavLink href="/news" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Noticias</NavLink>
+            <NavLink href="/news" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Noticias</NavLink>
           </li>
           <li>
-            <NavLink href="/ideas" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Ideas</NavLink>
+            <NavLink href="/ideas" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Ideas</NavLink>
           </li>
           <li>
-            <NavLink  href="/fan-insights" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Fans</NavLink>
+            <NavLink  href="/fan-insights" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Fans</NavLink>
           </li>
           <li>
-            <NavLink href="/backstage-with-brands" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Marcas</NavLink>
+            <NavLink href="/backstage-with-brands" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" activeClass="text-blue-600 bg-gray-100 active dark:bg-gray-800 dark:text-blue-500" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Marcas</NavLink>
           </li>
           <li>
-            <NavLink href="/" activeClass="" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Buscar</NavLink>
+            <NavLink href="/" activeClass="" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Buscar</NavLink>
           </li>
           {props.user && 
             <li>
-              <NavLink href="/admin" activeClass="" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Admin</NavLink>
+              <NavLink href="/admin" activeClass="" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="inline-block p-4 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300">Admin</NavLink>
             </li>
           }
           <li>
