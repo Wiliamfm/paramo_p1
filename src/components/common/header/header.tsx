@@ -8,6 +8,7 @@ import { NavLink } from "../navLink/navLink";
 import ImgParamoLogo from "../../../../public/images/paramo_logo.png?jsx";
 import { SideBarMenu } from "../sideBarMenu/sideBarMenu";
 import { User } from "@supabase/supabase-js";
+import { server$ } from "@builder.io/qwik-city";
 
 interface HeaderProps {
   user: User | null;
@@ -46,7 +47,7 @@ const TypeFormView = component$(
                 {/* 01HW175B1ZJ5BP9EHYRS309X9C */}
                 {/* <div>{dataTfLive}</div> */}
                 <div
-                  data-tf-live={dataTfLive}
+                  data-tf-widget={dataTfLive}
                   data-tf-hide-headers
                   data-tf-hide-footer
                   data-tf-opacity="0"
@@ -87,6 +88,11 @@ const TypeFormView = component$(
   }
 );
 
+export const getForm= server$(async function(formId: string) {
+  const response = await fetch(`https://api.typeform.com/forms/${formId}`)
+  return response.ok;
+});
+
 export default component$<HeaderProps>(({user}) => {
   const isDark = useSignal(false);
   const sideBarMenuRef = useSignal<Element>();
@@ -114,10 +120,9 @@ export default component$<HeaderProps>(({user}) => {
           return window.alert("no se pudo crear, algun campo vacio");
         }
 
-        let response  = await fetch(`https://api.typeform.com/forms/${val.id}/responses`,{
-          headers:{"Authorization":"Bearer tfp_LKSEEmi2mwiLbCk5F2hD6WmBEFCxNgJ6JqydycJJhx1_3pZrBuQ5Wtzfcs"}
-        })
-        if(!response.ok){
+        var response = await getForm(val.id);
+
+        if(!response){
           return window.alert("no se encontro el form")
         }
 

@@ -1,5 +1,5 @@
 import { z } from '@builder.io/qwik-city';
-import { NewsInputType } from '~/models/news';
+import { NewsInputType } from '~/models/news.models';
 
 export const newsInputSchema = {
   components: z.array(z.object({
